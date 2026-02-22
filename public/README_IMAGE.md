@@ -9,3 +9,9 @@ To display Purnima Rani's photo in the About section:
 
 The website will automatically display the image once it's placed in this folder.
 
+
+
+
+
+
+

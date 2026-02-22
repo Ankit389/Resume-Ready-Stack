@@ -23,11 +23,21 @@
   padding: 40px;
 }
 
-.professional-portrait {
+.professional-portrait-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   max-width: 350px;
+}
+
+.professional-portrait {
+  width: 100%;
+  max-width: 320px;
   aspect-ratio: 1;
   position: relative;
+  margin: 0 auto;
 }
 
 .portrait-image {
@@ -36,7 +46,21 @@
   object-fit: cover;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  border: 3px solid rgba(255, 255, 255, 0.8);
+  display: block;
+  margin: 0 auto;
+}
+
+.portrait-name {
+  margin-top: 24px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  text-align: center;
+  background: linear-gradient(135deg, #60a5fa, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.5px;
 }
 
 .portrait-placeholder {
@@ -48,20 +72,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 2px solid var(--border-color);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .portrait-icon {
   font-size: 4rem;
-  margin-bottom: 16px;
   opacity: 0.6;
-}
-
-.portrait-text {
-  font-size: 0.9rem;
-  color: var(--text-light);
-  font-weight: 500;
 }
 
 .about-text {
@@ -131,8 +147,17 @@
     min-height: 300px;
   }
 
-  .professional-portrait {
+  .professional-portrait-wrapper {
     max-width: 280px;
+  }
+
+  .professional-portrait {
+    max-width: 260px;
+  }
+
+  .portrait-name {
+    font-size: 1.375rem;
+    margin-top: 20px;
   }
 
   .about-text {
@@ -158,8 +183,17 @@
     min-height: 250px;
   }
 
-  .professional-portrait {
+  .professional-portrait-wrapper {
     max-width: 220px;
+  }
+
+  .professional-portrait {
+    max-width: 200px;
+  }
+
+  .portrait-name {
+    font-size: 1.25rem;
+    margin-top: 18px;
   }
 
   .portrait-icon {

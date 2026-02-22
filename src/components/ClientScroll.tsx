@@ -9,7 +9,7 @@ function ClientScroll() {
   const clients: Client[] = [
     { name: 'Gaurav Seni', company: 'Accenture' },
     { name: 'Om Shankar Shukla', company: 'Medianv' },
-    { name: 'Omkar', company: 'Infosys' },
+    { name: 'Avya sadh', company: 'Infosys' },
     { name: 'Kalawati Pankaj', company: 'McCain' },
     { name: 'Manish', company: 'Bosch' }
   ]
@@ -58,5 +58,11 @@ function ClientScroll() {
 }
 
 export default ClientScroll
+
+
+
+
+
+
 
 

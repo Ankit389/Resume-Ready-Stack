@@ -1,6 +1,7 @@
 import Hero from '../components/Hero'
 import About from '../components/About'
 import Services from '../components/Services'
+import Pricing from '../components/Pricing'
 import WhyChooseMe from '../components/WhyChooseMe'
 import Proof from '../components/Proof'
 import ClientScroll from '../components/ClientScroll'
@@ -14,6 +15,7 @@ function Home() {
       <Hero />
       <About />
       <Services />
+      <Pricing />
       <WhyChooseMe />
       <Proof />
       <ClientScroll />

@@ -10,22 +10,24 @@ function About() {
         </div>
         <div className="about-card">
           <div className="about-image">
-            <div className="professional-portrait">
-              <img 
-                src="/purnima-rani.jpg" 
-                alt="Purnima Rani" 
-                className="portrait-image"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
-                  const placeholder = target.nextElementSibling as HTMLElement;
-                  if (placeholder) placeholder.style.display = 'flex';
-                }}
-              />
-              <div className="portrait-placeholder" style={{display: 'none'}}>
-                <div className="portrait-icon">👤</div>
-                <div className="portrait-text">Purnima Rani</div>
+            <div className="professional-portrait-wrapper">
+              <div className="professional-portrait">
+                <img 
+                  src="/purnima-rani.jpg" 
+                  alt="Purnima Rani" 
+                  className="portrait-image"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    const placeholder = target.nextElementSibling as HTMLElement;
+                    if (placeholder) placeholder.style.display = 'flex';
+                  }}
+                />
+                <div className="portrait-placeholder" style={{display: 'none'}}>
+                  <div className="portrait-icon">👤</div>
+                </div>
               </div>
+              <div className="portrait-name">Purnima Rani</div>
             </div>
           </div>
           <div className="about-text">

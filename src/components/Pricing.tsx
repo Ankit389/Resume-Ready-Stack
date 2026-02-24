@@ -21,6 +21,7 @@ function Pricing() {
       id: 'basic',
       name: 'Basic Package',
       price: 999,
+       originalPrice: 1299,
       badge: 'Best for Freshers',
       color: 'blue',
       features: [
@@ -52,7 +53,7 @@ function Pricing() {
     {
       id: 'premium',
       name: 'Premium Package',
-      price: 2500,
+      price: 2499,
       originalPrice: 3500,
       badge: 'Best Value',
       color: 'gold',

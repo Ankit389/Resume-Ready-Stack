@@ -17,6 +17,23 @@
   flex-direction: column;
 }
 
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.footer-logo {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18);
+}
+
 .footer-title {
   font-size: 1.75rem;
   font-weight: 700;
@@ -26,6 +43,17 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.footer-contact-link {
+  color: #cbd5e1;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.footer-contact-link:hover {
+  color: #60a5fa;
+  text-decoration: underline;
 }
 
 .footer-description {
@@ -152,6 +180,12 @@
 
   .footer-title {
     font-size: 1.5rem;
+  }
+
+  .footer-logo {
+    width: 46px;
+    height: 46px;
+    padding: 7px;
   }
 
   .footer-subtitle {

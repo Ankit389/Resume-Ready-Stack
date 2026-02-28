@@ -1,18 +1,17 @@
 import './Contact.css'
+import { CONTACT, gmailComposeUrl, whatsappUrl } from '../config/contact'
 
 function Contact() {
   const handleWhatsAppClick = () => {
-    // Replace with your actual WhatsApp number (format: country code + number without + or spaces)
-    const phoneNumber = '1234567890' // Example: Replace with actual number
-    const message = encodeURIComponent('Hello! I\'m interested in your resume services.')
-    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank')
+    const message = `Hello! I want to know about your resume services.`
+    window.open(whatsappUrl(CONTACT.whatsappPhone, message), '_blank')
   }
 
   const handleEmailClick = () => {
-    const email = 'contact@purnimacareerstudio.com'
-    const subject = encodeURIComponent('Inquiry about Resume Services')
-    const body = encodeURIComponent('Hello,\n\nI would like to know more about your resume services.\n\nThank you!')
-    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`
+    const subject = 'Job Details / Resume Service Requirement'
+    const body =
+      'Hello,\n\nI want to share my job description / requirement.\n\nName:\nPhone:\nService Needed:\nJob Role:\nCompany:\nExperience:\n\nThank you!'
+    window.open(gmailComposeUrl({ to: CONTACT.email, subject, body }), '_blank')
   }
 
   return (
@@ -65,7 +64,7 @@ function Contact() {
               </button>
               <button onClick={handleEmailClick} className="cta-btn cta-email">
                 <span className="cta-icon">📧</span>
-                <span className="cta-text">Send an Email</span>
+                <span className="cta-text">Send Job on Gmail</span>
               </button>
             </div>
 

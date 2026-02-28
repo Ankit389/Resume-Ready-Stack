@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './Pricing.css'
+import { CONTACT, gmailComposeUrl, whatsappUrl } from '../config/contact'
 
 interface Package {
   id: string
@@ -77,21 +78,16 @@ function Pricing() {
   }
 
   const handleWhatsAppPayment = (pkg: Package) => {
-    const phoneNumber = '1234567890' // Replace with your WhatsApp number
-    const message = encodeURIComponent(
-      `Hello! I want to purchase the ${pkg.name} (₹${pkg.price}). Please share payment details.`
-    )
-    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank')
+    const message = `Hello! I want to purchase the ${pkg.name} (₹${pkg.price}). Please share payment details.`
+    window.open(whatsappUrl(CONTACT.whatsappPhone, message), '_blank')
     setShowPaymentModal(false)
   }
 
   const handleEmailPayment = (pkg: Package) => {
-    const email = 'contact@purnimacareerstudio.com'
-    const subject = encodeURIComponent(`Payment Request - ${pkg.name}`)
-    const body = encodeURIComponent(
+    const subject = `Payment Request - ${pkg.name}`
+    const body =
       `Hello,\n\nI want to purchase the ${pkg.name} (₹${pkg.price}).\n\nPlease share payment details.\n\nThank you!`
-    )
-    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`
+    window.open(gmailComposeUrl({ to: CONTACT.email, subject, body }), '_blank')
     setShowPaymentModal(false)
   }
 

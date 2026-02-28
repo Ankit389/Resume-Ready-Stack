@@ -1,4 +1,5 @@
 import './Footer.css'
+import { CONTACT, gmailComposeUrl, whatsappUrl } from '../config/contact'
 
 function Footer() {
   const currentYear = new Date().getFullYear()
@@ -8,19 +9,44 @@ function Footer() {
       <div className="container">
         <div className="footer-content">
           <div className="footer-section footer-about">
-            <h3 className="footer-title">Resume Ready Stack</h3>
+            <div className="footer-brand">
+              <img
+                className="footer-logo  "
+                src="/resume-ready-stack-logo.svg"
+                alt="Resume Ready Stack"
+              />
+              <h3 className="footer-title">Resume Ready Stack</h3>
+            </div>
             <p className="footer-description">
               Professional Resume Writing & Career Profile Services. Helping professionals 
               achieve their career goals with ATS-optimized resumes and compelling profiles.
             </p>
             <div className="footer-social">
-              <a href="#" className="social-link" aria-label="WhatsApp">
+              <a
+                href={whatsappUrl(CONTACT.whatsappPhone, 'Hello! I want to know about your services.')}
+                className="social-link"
+                aria-label="WhatsApp"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <span className="social-icon">💬</span>
               </a>
-              <a href="#" className="social-link" aria-label="Email">
+              <a
+                href={gmailComposeUrl({ to: CONTACT.email, subject: 'Resume / Career Profile Requirement' })}
+                className="social-link"
+                aria-label="Email"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <span className="social-icon">📧</span>
               </a>
-              <a href="#" className="social-link" aria-label="LinkedIn">
+              <a
+                href={CONTACT.linkedInUrl}
+                className="social-link"
+                aria-label="LinkedIn"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <span className="social-icon">💼</span>
               </a>
             </div>
@@ -54,11 +80,25 @@ function Footer() {
             <div className="footer-contact-info">
               <div className="contact-item">
                 <span className="contact-icon">📧</span>
-                <span>contact@purnimacareerstudio.com</span>
+                <a
+                  className="footer-contact-link"
+                  href={gmailComposeUrl({ to: CONTACT.email, subject: 'Resume / Job Requirement' })}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {CONTACT.email}
+                </a>
               </div>
               <div className="contact-item">
                 <span className="contact-icon">💬</span>
-                <span>Available on WhatsApp</span>
+                <a
+                  className="footer-contact-link"
+                  href={whatsappUrl(CONTACT.whatsappPhone, 'Hello! I want to connect on WhatsApp.')}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  WhatsApp: {CONTACT.whatsappPhone}
+                </a>
               </div>
               <div className="contact-item">
                 <span className="contact-icon">⏰</span>

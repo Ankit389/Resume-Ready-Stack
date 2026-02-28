@@ -1,4 +1,5 @@
 import Hero from '../components/Hero'
+import Navbar from '../components/Navbar'
 import About from '../components/About'
 import Services from '../components/Services'
 import Pricing from '../components/Pricing'
@@ -12,6 +13,7 @@ import Footer from '../components/Footer'
 function Home() {
   return (
     <div className="home">
+      <Navbar />
       <Hero />
       <About />
       <Services />

@@ -1,118 +1,130 @@
 import './Footer.css'
-import { CONTACT, gmailComposeUrl, whatsappUrl } from '../config/contact'
 
 function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
     <footer className="footer">
-      <div className="container">
-        <div className="footer-content">
-          <div className="footer-section footer-about">
-            <div className="footer-brand">
+      <div className="footer-content">
+        {/* Brand Section */}
+        <div className="footer-section">
+          <div className="footer-brand">
+            <div className="footer-logo">
               <img
-                className="footer-logo  "
                 src="/resume-ready-stack-logo.svg"
                 alt="Resume Ready Stack"
               />
-              <h3 className="footer-title">Resume Ready Stack</h3>
             </div>
-            <p className="footer-description">
-              Professional Resume Writing & Career Profile Services. Helping professionals 
-              achieve their career goals with ATS-optimized resumes and compelling profiles.
-            </p>
-            <div className="footer-social">
-              <a
-                href={whatsappUrl(CONTACT.whatsappPhone, 'Hello! I want to know about your services.')}
-                className="social-link"
-                aria-label="WhatsApp"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span className="social-icon">💬</span>
-              </a>
-              <a
-                href={gmailComposeUrl({ to: CONTACT.email, subject: 'Resume / Career Profile Requirement' })}
-                className="social-link"
-                aria-label="Email"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span className="social-icon">📧</span>
-              </a>
-              <a
-                href={CONTACT.linkedInUrl}
-                className="social-link"
-                aria-label="LinkedIn"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span className="social-icon">💼</span>
-              </a>
-            </div>
+            <h3 className="footer-title">Resume Ready Stack</h3>
           </div>
-
-          <div className="footer-section footer-services">
-            <h4 className="footer-subtitle">Services</h4>
-            <ul className="footer-links">
-              <li><a href="#services">ATS Resume Writing</a></li>
-              <li><a href="#services">Cover Letter Writing</a></li>
-              <li><a href="#services">LinkedIn Optimization</a></li>
-              <li><a href="#services">Portfolio Creation</a></li>
-              <li><a href="#services">Resume Review</a></li>
-            </ul>
-          </div>
-
-          <div className="footer-section footer-quick-links">
-            <h4 className="footer-subtitle">Quick Links</h4>
-            <ul className="footer-links">
-              <li><a href="#about">About Me</a></li>
-              <li><a href="#services">Services</a></li>
-              <li><a href="#why-choose-me">Why Choose Me</a></li>
-              <li><a href="#proof">Proof & Results</a></li>
-              <li><a href="#process">How It Works</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </div>
-
-          <div className="footer-section footer-contact">
-            <h4 className="footer-subtitle">Get In Touch</h4>
-            <div className="footer-contact-info">
-              <div className="contact-item">
-                <span className="contact-icon">📧</span>
-                <a
-                  className="footer-contact-link"
-                  href={gmailComposeUrl({ to: CONTACT.email, subject: 'Resume / Job Requirement' })}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {CONTACT.email}
-                </a>
-              </div>
-              <div className="contact-item">
-                <span className="contact-icon">💬</span>
-                <a
-                  className="footer-contact-link"
-                  href={whatsappUrl(CONTACT.whatsappPhone, 'Hello! I want to connect on WhatsApp.')}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  WhatsApp: {CONTACT.whatsappPhone}
-                </a>
-              </div>
-              <div className="contact-item">
-                <span className="contact-icon">⏰</span>
-                <span>Response within 24 hours</span>
-              </div>
-            </div>
+          <p className="footer-description">
+            Professional Resume Writing & Career Profile Services. Helping professionals 
+            achieve their career goals with ATS-optimized resumes and compelling profiles.
+          </p>
+          <div className="footer-social">
+            <a
+              href="https://wa.me/919876543210?text=Hello! I want to know about your services."
+              className="footer-social-link"
+              aria-label="WhatsApp"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>💬</span>
+            </a>
+            <a
+              href="mailto:technicalpurnima123@oksbi.com?subject=Resume / Career Profile Requirement"
+              className="footer-social-link"
+              aria-label="Email"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>📧</span>
+            </a>
+            <a
+              href="https://linkedin.com/in/purnima-rani"
+              className="footer-social-link"
+              aria-label="LinkedIn"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>💼</span>
+            </a>
           </div>
         </div>
 
-        <div className="footer-bottom">
-          <div className="footer-copyright">
-            <p>&copy; {currentYear}Resume Ready Stack. All rights reserved.</p>
-            <p className="footer-tagline">Crafting Careers, One Resume at a Time</p>
+        {/* Quick Links */}
+        <div className="footer-section">
+          <h4 className="footer-heading">Quick Links</h4>
+          <ul className="footer-links">
+            <li>
+              <a href="#home" className="footer-link">Home</a>
+            </li>
+            <li>
+              <a href="#about" className="footer-link">About</a>
+            </li>
+            <li>
+              <a href="#services" className="footer-link">Services</a>
+            </li>
+            <li>
+              <a href="#payment-plans" className="footer-link">Payment Plans</a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Services */}
+        <div className="footer-section">
+          <h4 className="footer-heading">Services</h4>
+          <ul className="footer-links">
+            <li>
+              <a href="#services" className="footer-link">ATS Resume</a>
+            </li>
+            <li>
+              <a href="#services" className="footer-link">Cover Letter</a>
+            </li>
+            <li>
+              <a href="#services" className="footer-link">LinkedIn Profile</a>
+            </li>
+            <li>
+              <a href="#services" className="footer-link">Portfolio</a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Contact */}
+        <div className="footer-section">
+          <h4 className="footer-heading">Contact</h4>
+          <div className="footer-contact">
+            <div className="footer-contact-item">
+              <div className="footer-contact-icon">📧</div>
+              <a href="mailto:technicalpurnima123@oksbi.com" className="footer-contact-link">
+                technicalpurnima123@oksbi.com
+              </a>
+            </div>
+            <div className="footer-contact-item">
+              <div className="footer-contact-icon">📱</div>
+              <a href="tel:+919876543210" className="footer-contact-link">
+                +91 98765 43210
+              </a>
+            </div>
+            <div className="footer-contact-item">
+              <div className="footer-contact-icon">💬</div>
+              <a href="https://wa.me/919876543210" className="footer-contact-link">
+                WhatsApp
+              </a>
+            </div>
           </div>
+        </div>
+      </div>
+
+      {/* Bottom Section */}
+      <div className="footer-bottom">
+        <p className="footer-copyright">
+          © {currentYear} Resume Ready Stack. All rights reserved.
+        </p>
+        <div className="footer-bottom-links">
+          <a href="#" className="footer-bottom-link">Privacy Policy</a>
+          <a href="#" className="footer-bottom-link">Terms of Service</a>
+          <a href="#" className="footer-bottom-link">Refund Policy</a>
         </div>
       </div>
     </footer>
@@ -120,10 +132,3 @@ function Footer() {
 }
 
 export default Footer
-
-
-
-
-
-
-

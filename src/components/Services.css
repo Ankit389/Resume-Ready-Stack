@@ -49,6 +49,48 @@
   font-size: 1rem;
   color: var(--text-medium);
   line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.service-price {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.service-price-label {
+  font-size: 0.875rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.service-price-amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #3b82f6;
+  background: linear-gradient(135deg, #60a5fa, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.service-view-pricing {
+  margin-top: 20px;
+  display: inline-block;
+  color: #3b82f6;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  padding: 8px 0;
+}
+
+.service-view-pricing:hover {
+  color: #a78bfa;
+  transform: translateX(5px);
 }
 
 @media (max-width: 968px) {

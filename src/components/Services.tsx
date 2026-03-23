@@ -4,7 +4,7 @@ function Services() {
   const services = [
     {
       title: 'ATS Resume Writing',
-      description: 'Professionally crafted resumes optimized for Applicant Tracking Systems. Keyword-rich content that gets you past automated screening.',
+      description: 'Professionally crafted resumes optimized for Applicant Tracking Systems. Keyword-rich content that gets you past automated screening and increases interview chances.',
       icon: '📄'
     },
     {
@@ -18,14 +18,19 @@ function Services() {
       icon: '💼'
     },
     {
-      title: 'Portfolio Creation',
-      description: 'Professional portfolio development to showcase your work, projects, and achievements. Stand out with a polished online presence.',
-      icon: '🎨'
-    },
-    {
-      title: 'Resume Review & ATS Improvement',
+      title: 'Resume Review & ATS Enhancement',
       description: 'Comprehensive review of your existing resume with actionable feedback. Enhance ATS compatibility and overall impact.',
       icon: '🔍'
+    },
+    {
+      title: 'Job Portal Profile Optimization',
+      description: 'Optimize your profiles on Indeed, Internshala, OkRemote, We Work Remotely & Naukri. Increase visibility to recruiters and job opportunities.',
+      icon: '🌐'
+    },
+    {
+      title: 'Website Making',
+      description: 'Personal Branding / Portfolio Website for professional online presence. Showcase your skills and achievements effectively.',
+      icon: '💻'
     }
   ]
 

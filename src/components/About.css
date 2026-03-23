@@ -35,11 +35,12 @@
 .professional-portrait {
   width: 100%;
   max-width: 320px;
-  aspect-ratio: 1;
+  height: 420px;              /* 🔥 Portrait height */
   position: relative;
   margin: 0 auto;
+  border-radius: 12px;
+  overflow: hidden;           /* safe */
 }
-
 .portrait-brand-badge {
   position: absolute;
   top: 12px;

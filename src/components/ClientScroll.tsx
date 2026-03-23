@@ -7,7 +7,7 @@ interface Client {
 
 function ClientScroll() {
   const clients: Client[] = [
-    { name: 'Gaurav Seni', company: 'Accenture' },
+    { name: 'Gaurav Saini', company: 'Accenture' },
     { name: 'Om Shankar Shukla', company: 'Medianv' },
     { name: 'Avya sadh', company: 'Infosys' },
     { name: 'Kalawati Pankaj', company: 'McCain' },

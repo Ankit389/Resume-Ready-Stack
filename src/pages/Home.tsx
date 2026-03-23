@@ -2,7 +2,7 @@ import Hero from '../components/Hero'
 import Navbar from '../components/Navbar'
 import About from '../components/About'
 import Services from '../components/Services'
-import Pricing from '../components/Pricing'
+import PaymentPlans from '../components/PaymentPlans'
 import WhyChooseMe from '../components/WhyChooseMe'
 import Proof from '../components/Proof'
 import ClientScroll from '../components/ClientScroll'
@@ -17,7 +17,7 @@ function Home() {
       <Hero />
       <About />
       <Services />
-      <Pricing />
+      <PaymentPlans />
       <WhyChooseMe />
       <Proof />
       <ClientScroll />

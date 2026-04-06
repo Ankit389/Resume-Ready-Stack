@@ -1,269 +1,188 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { Star } from 'lucide-react'
 import './Testimonials.css'
 
-interface Testimonial {
-  id: string
-  name: string
-  role: string
-  company: string
-  avatar: string
-  rating: number
-  testimonial: string
-  beforeAfter?: {
-    before: string
-    after: string
+const testimonials = [
+  {
+    id: 1,
+    name: "Rohit Sharma",
+    role: "Software Developer",
+    company: "HCL Technologies",
+    text: "Got 3 interview calls within a week! My resume passed ATS for the first time. Amazing service!",
+    rating: 5
+  },
+  {
+    id: 2,
+    name: "Priya Patel",
+    role: "Data Analyst",
+    company: "StartupHub",
+    text: "The LinkedIn profile optimization was a game-changer. Recruiters started reaching out to me!",
+    rating: 5
+  },
+  {
+    id: 3,
+    name: "Amit Kumar",
+    role: "Product Manager",
+    company: "Accenture",
+    text: "Professional resume writing helped me land my dream job. Worth every penny!",
+    rating: 5
+  },
+  {
+    id: 4,
+    name: "Neha Singh",
+    role: "UX Designer",
+    company: "Infosys",
+    text: "The portfolio setup service was incredible. My work is now professionally presented.",
+    rating: 5
   }
-  service: string
-  date: string
-}
+]
 
 function Testimonials() {
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [currentIndex, setCurrentIndex] = useState(0)
 
-  const testimonials: Testimonial[] = [
-    {
-      id: '1',
-      name: 'Rahul Sharma',
-      role: 'Software Engineer',
-      company: 'Infosys',
-      avatar: '👨‍💻',
-      rating: 5,
-      testimonial: 'I was struggling to get interview calls for 6 months. After getting my resume optimized by Resume Ready Stack, I received 8 interview calls in just 2 weeks! The ATS-friendly format made all the difference.',
-      beforeAfter: {
-        before: '0 interview calls in 6 months',
-        after: '8 interview calls in 2 weeks, landed job at Infosys'
-      },
-      service: 'ATS Resume Writing',
-      date: '2024'
-    },
-    {
-      id: '2',
-      name: 'Priya Patel',
-      role: 'Marketing Manager',
-      company: 'Hindustan Unilever',
-      avatar: '👩‍💼',
-      rating: 5,
-      testimonial: 'The LinkedIn optimization service was exceptional! My profile views increased by 300% and recruiters started reaching out directly. The cover letter was perfectly tailored for each application.',
-      beforeAfter: {
-        before: '50 profile views per month',
-        after: '200+ profile views per month, multiple recruiter messages'
-      },
-      service: 'LinkedIn Optimization + Cover Letter',
-      date: '2024'
-    },
-    {
-      id: '3',
-      name: 'Amit Kumar',
-      role: 'Data Analyst',
-      company: 'TCS',
-      avatar: '👨‍📊',
-      rating: 5,
-      testimonial: 'As a fresher, I had no idea how to structure my resume. The team created a professional resume highlighting my projects and skills. I got placed in TCS through campus placement!',
-      service: 'Fresher Resume Writing',
-      date: '2023'
-    },
-    {
-      id: '4',
-      name: 'Sneha Reddy',
-      role: 'HR Professional',
-      company: 'Wipro',
-      avatar: '👩‍💼',
-      rating: 5,
-      testimonial: 'The complete package was worth every penny! Resume, cover letter, and LinkedIn optimization - everything was perfect. I especially loved the portfolio creation that showcased my HR projects.',
-      service: 'Complete Package',
-      date: '2024'
-    },
-    {
-      id: '5',
-      name: 'Vikram Singh',
-      role: 'Mechanical Engineer',
-      company: 'Larsen & Toubro',
-      avatar: '👷‍♂️',
-      rating: 5,
-      testimonial: 'My technical resume was transformed! The team knew exactly what recruiters in engineering look for. The portfolio section with my project details was impressive.',
-      service: 'ATS Resume + Portfolio',
-      date: '2023'
-    },
-    {
-      id: '6',
-      name: 'Neha Gupta',
-      role: 'Business Analyst',
-      company: 'Deloitte',
-      avatar: '👩‍💻',
-      rating: 5,
-      testimonial: 'Outstanding service! The resume highlighted my business analysis skills perfectly. The cover letter addressed the job requirements specifically. Got multiple offers!',
-      service: 'Resume + Cover Letter',
-      date: '2024'
-    }
-  ]
+  // Auto-slide functionality
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prevIndex) => 
+        prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
+      )
+    }, 4000) // Change slide every 4 seconds
 
-  const nextTestimonial = () => {
-    setActiveIndex((prev) => (prev + 1) % testimonials.length)
+    return () => clearInterval(timer)
+  }, [])
+
+  const goToSlide = (index) => {
+    setCurrentIndex(index)
   }
 
-  const prevTestimonial = () => {
-    setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
+  const nextSlide = () => {
+    setCurrentIndex(currentIndex === testimonials.length - 1 ? 0 : currentIndex + 1)
   }
 
-  const goToTestimonial = (index: number) => {
-    setActiveIndex(index)
+  const prevSlide = () => {
+    setCurrentIndex(currentIndex === 0 ? testimonials.length - 1 : currentIndex - 1)
   }
-
-  const renderStars = (rating: number) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <span key={i} className={`star ${i < rating ? 'filled' : ''}`}>
-        ★
-      </span>
-    ))
-  }
-
-  const currentTestimonial = testimonials[activeIndex]
 
   return (
-    <section id="testimonials" className="testimonials-section">
-      <div className="container">
+    <section className="testimonials-section">
+      <div className="testimonials-container">
+        {/* Section Header */}
         <div className="testimonials-header">
-          <h2 className="testimonials-title">Success Stories</h2>
-          <p className="testimonials-subtitle">
-            Hear from professionals who transformed their careers with our help
-          </p>
+          <h2 className="testimonials-title">What Our Clients Say 💬</h2>
+          <p className="testimonials-subtitle">Real results from job seekers who trusted us</p>
         </div>
 
-        <div className="testimonials-stats">
-          <div className="stat-item">
-            <div className="stat-number">50+</div>
-            <div className="stat-label">Happy Clients</div>
-          </div>
-          <div className="stat-item">
-            <div className="stat-number">95%</div>
-            <div className="stat-label">Success Rate</div>
-          </div>
-          <div className="stat-item">
-            <div className="stat-number">4.9</div>
-            <div className="stat-label">Average Rating</div>
-          </div>
-          <div className="stat-item">
-            <div className="stat-number">30</div>
-            <div className="stat-label">Days Average</div>
-          </div>
-        </div>
-
-        <div className="testimonials-container">
-          <div className="testimonial-carousel">
-            <div className="testimonial-card">
-              <div className="testimonial-header">
-                <div className="client-info">
-                  <div className="client-avatar">
-                    <span className="avatar-emoji">{currentTestimonial.avatar}</span>
-                  </div>
-                  <div className="client-details">
-                    <h3 className="client-name">{currentTestimonial.name}</h3>
-                    <p className="client-role">{currentTestimonial.role}</p>
-                    <p className="client-company">{currentTestimonial.company}</p>
-                  </div>
-                </div>
-                <div className="testimonial-meta">
-                  <div className="rating">
-                    {renderStars(currentTestimonial.rating)}
-                  </div>
-                  <div className="service-badge">
-                    {currentTestimonial.service}
-                  </div>
-                </div>
-              </div>
-
-              <div className="testimonial-content">
-                <p className="testimonial-text">
-                  "{currentTestimonial.testimonial}"
-                </p>
-              </div>
-
-              {currentTestimonial.beforeAfter && (
-                <div className="before-after">
-                  <div className="before">
-                    <h4>Before</h4>
-                    <p>{currentTestimonial.beforeAfter.before}</p>
-                  </div>
-                  <div className="arrow">→</div>
-                  <div className="after">
-                    <h4>After</h4>
-                    <p>{currentTestimonial.beforeAfter.after}</p>
-                  </div>
-                </div>
-              )}
-
-              <div className="testimonial-footer">
-                <div className="testimonial-date">
-                  Placed in {currentTestimonial.date}
-                </div>
-              </div>
-            </div>
-
-            <div className="carousel-controls">
-              <button 
-                className="carousel-btn prev"
-                onClick={prevTestimonial}
-                aria-label="Previous testimonial"
-              >
-                ‹
-              </button>
-              
-              <div className="carousel-dots">
-                {testimonials.map((_, index) => (
-                  <button
-                    key={index}
-                    className={`dot ${index === activeIndex ? 'active' : ''}`}
-                    onClick={() => goToTestimonial(index)}
-                    aria-label={`Go to testimonial ${index + 1}`}
+        {/* Testimonials Grid - Desktop View */}
+        <div className="testimonials-grid">
+          {testimonials.map((testimonial) => (
+            <div key={testimonial.id} className="testimonial-card">
+              {/* Star Rating */}
+              <div className="testimonial-rating">
+                {[...Array(5)].map((_, index) => (
+                  <Star 
+                    key={index} 
+                    className={`star ${index < testimonial.rating ? 'star-filled' : 'star-empty'}`}
+                    size={16}
+                    fill={index < testimonial.rating ? '#f59e0b' : 'none'}
+                    color={index < testimonial.rating ? '#f59e0b' : '#d1d5db'}
                   />
                 ))}
               </div>
-              
-              <button 
-                className="carousel-btn next"
-                onClick={nextTestimonial}
-                aria-label="Next testimonial"
-              >
-                ›
-              </button>
+
+              {/* Testimonial Text */}
+              <p className="testimonial-text">"{testimonial.text}"</p>
+
+              {/* Client Info */}
+              <div className="testimonial-client">
+                <div className="client-avatar">
+                  <span className="avatar-initials">
+                    {testimonial.name.split(' ').map(n => n[0]).join('')}
+                  </span>
+                </div>
+                <div className="client-info">
+                  <h4 className="client-name">{testimonial.name}</h4>
+                  <p className="client-role">{testimonial.role}</p>
+                  {testimonial.company && (
+                    <p className="client-company">{testimonial.company}</p>
+                  )}
+                </div>
+              </div>
             </div>
+          ))}
+        </div>
+
+        {/* Mobile Carousel */}
+        <div className="testimonials-carousel">
+          <div className="carousel-container">
+            <button className="carousel-btn carousel-btn-prev" onClick={prevSlide}>
+              ‹
+            </button>
+            
+            <div className="carousel-track">
+              {testimonials.map((testimonial, index) => (
+                <div 
+                  key={testimonial.id} 
+                  className={`carousel-slide ${index === currentIndex ? 'active' : ''}`}
+                >
+                  <div className="testimonial-card">
+                    {/* Star Rating */}
+                    <div className="testimonial-rating">
+                      {[...Array(5)].map((_, starIndex) => (
+                        <Star 
+                          key={starIndex} 
+                          className={`star ${starIndex < testimonial.rating ? 'star-filled' : 'star-empty'}`}
+                          size={16}
+                          fill={starIndex < testimonial.rating ? '#f59e0b' : 'none'}
+                          color={starIndex < testimonial.rating ? '#f59e0b' : '#d1d5db'}
+                        />
+                      ))}
+                    </div>
+
+                    {/* Testimonial Text */}
+                    <p className="testimonial-text">"{testimonial.text}"</p>
+
+                    {/* Client Info */}
+                    <div className="testimonial-client">
+                      <div className="client-avatar">
+                        <span className="avatar-initials">
+                          {testimonial.name.split(' ').map(n => n[0]).join('')}
+                        </span>
+                      </div>
+                      <div className="client-info">
+                        <h4 className="client-name">{testimonial.name}</h4>
+                        <p className="client-role">{testimonial.role}</p>
+                        {testimonial.company && (
+                          <p className="client-company">{testimonial.company}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <button className="carousel-btn carousel-btn-next" onClick={nextSlide}>
+              ›
+            </button>
           </div>
 
-          <div className="testimonials-grid">
-            {testimonials.slice(0, 6).map((testimonial, index) => (
-              <div 
-                key={testimonial.id}
-                className={`testimonial-card-small ${index === activeIndex ? 'active' : ''}`}
-                onClick={() => goToTestimonial(index)}
-              >
-                <div className="card-small-header">
-                  <div className="client-avatar-small">
-                    <span className="avatar-emoji">{testimonial.avatar}</span>
-                  </div>
-                  <div className="client-info-small">
-                    <h4>{testimonial.name}</h4>
-                    <p>{testimonial.role}</p>
-                  </div>
-                </div>
-                <div className="rating-small">
-                  {renderStars(testimonial.rating)}
-                </div>
-                <p className="testimonial-text-small">
-                  "{testimonial.testimonial.substring(0, 100)}..."
-                </p>
-              </div>
+          {/* Carousel Dots */}
+          <div className="carousel-dots">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                className={`dot ${index === currentIndex ? 'active' : ''}`}
+                onClick={() => goToSlide(index)}
+              />
             ))}
           </div>
         </div>
 
+        {/* CTA Button */}
         <div className="testimonials-cta">
-          <div className="cta-content">
-            <h3>Ready to write your success story?</h3>
-            <p>Join 50+ professionals who landed their dream jobs</p>
-            <a href="#pricing" className="btn btn-primary btn-large">
-              Start Your Journey
-            </a>
-          </div>
+          <a href="#payment-plans" className="cta-button">
+            Get Free Resume Audit 🚀
+          </a>
         </div>
       </div>
     </section>

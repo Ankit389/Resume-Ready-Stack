@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar'
 import About from '../components/About'
 import Services from '../components/Services'
 import PaymentPlans from '../components/PaymentPlans'
+import Testimonials from '../components/Testimonials'
 import WhyChooseMe from '../components/WhyChooseMe'
 import Proof from '../components/Proof'
 import ClientScroll from '../components/ClientScroll'
@@ -18,6 +19,7 @@ function Home() {
       <About />
       <Services />
       <PaymentPlans />
+      <Testimonials />
       <WhyChooseMe />
       <Proof />
       <ClientScroll />

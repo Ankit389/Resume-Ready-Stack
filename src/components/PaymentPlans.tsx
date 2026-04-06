@@ -1,6 +1,6 @@
 
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./PaymentPlans.css";
 
 declare global {
@@ -12,63 +12,52 @@ declare global {
 const plans = [
   {
     id: 1,
-    name: "Basic Plan",
-    price: 999,
-    features: ["ATS Resume", "Cover Letter"],
+    name: "Resume Audit",
+    price: 0,
+    features: ["Free Resume Review", "ATS Score Check", "Keyword Analysis", "Format Check"],
     popular: false,
-    best: false
+    best: false,
+    type: "free"
   },
   {
     id: 2,
-    name: "Professional Plan",
+    name: "ATS Optimization",
     price: 1999,
-    features: ["ATS Resume", "Cover Letter", "Job Portal Optimization"],
+    features: ["ATS Resume", "Cover Letter", "Keyword Optimization", "Format Fix"],
     popular: true,
-    best: false
+    best: false,
+    type: "core"
   },
   {
     id: 3,
-    name: "Premium Plan",
+    name: "Profile Package",
     price: 2999,
-    features: ["ATS Resume", "Cover Letter", "Profile Optimization", "Portfolio"],
+    features: ["ATS Resume", "LinkedIn Profile", "Cover Letter", "Portfolio Setup"],
     popular: false,
-    best: false
+    best: false,
+    type: "premium"
   },
   {
     id: 4,
-    name: "Advanced Plan",
+    name: "Complete Career",
     price: 4999,
     features: [
       "ATS Resume",
-      "Portfolio",
-      "Website",
+      "LinkedIn Profile", 
+      "Portfolio Website",
       "Cover Letter",
-      "All Optimization",
-      "Mentorship",
+      "Interview Prep",
+      "Job Support",
     ],
     popular: false,
-    best: true
+    best: true,
+    type: "ultimate"
   },
 ];
 
 export default function PaymentPlans() {
   const [cart, setCart] = useState<any[]>([]);
   const [showCart, setShowCart] = useState(false);
-  const [coupon, setCoupon] = useState("");
-  const [discount, setDiscount] = useState(0);
-  const [loading, setLoading] = useState(false);
-
-  // Load Razorpay script
-  useEffect(() => {
-    const script = document.createElement('script')
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js'
-    script.async = true
-    document.body.appendChild(script)
-
-    return () => {
-      document.body.removeChild(script)
-    }
-  }, [])
 
   // Add to cart
   const addToCart = (plan: any) => {
@@ -77,6 +66,10 @@ export default function PaymentPlans() {
     if (!exists) {
       setCart([...cart, plan]);
       setShowCart(true);
+      
+      // Store selected plan for payment gateway
+      localStorage.setItem('selectedPlan', plan.name);
+      localStorage.setItem('planPrice', plan.price.toString());
     }
   };
 
@@ -96,23 +89,9 @@ export default function PaymentPlans() {
     setCart(cart.filter((item) => item.id !== planId));
   };
 
-  // Calculate totals
+  // Calculate totals (without GST and coupons as requested)
   const subtotal = cart.reduce((acc, item) => acc + item.price, 0);
-  const gst = Math.round(subtotal * 0.18);
-  const totalAfterDiscount = subtotal - discount;
-  const total = totalAfterDiscount + gst;
-
-  // Apply coupon
-  const applyCoupon = () => {
-    if (coupon.toUpperCase() === "SAVE10") {
-      setDiscount(Math.round(subtotal * 0.1));
-    } else if (coupon.toUpperCase() === "SAVE20") {
-      setDiscount(Math.round(subtotal * 0.2));
-    } else {
-      alert("Invalid coupon code");
-      setDiscount(0);
-    }
-  };
+  const total = subtotal;
 
   // Payment handler
   const handlePayment = () => {
@@ -121,82 +100,39 @@ export default function PaymentPlans() {
       return;
     }
 
-    setLoading(true);
-
-    // Check if Razorpay is loaded
-    if (!window.Razorpay) {
-      alert("Payment system is loading. Please try again in a moment.");
-      setLoading(false);
+    // Free plan - redirect to payment gateway
+    const freePlan = cart.find(item => item.price === 0);
+    if (freePlan && cart.length === 1) {
+      localStorage.setItem('selectedPlan', freePlan.name);
+      localStorage.setItem('planPrice', '0');
+      window.location.href = '/payment-gateway';
       return;
     }
 
-    const options = {
-      key: "rzp_test_1234567890",
-      amount: total * 100,
-      currency: "INR",
-      name: "Resume Ready Stack",
-      description: `Purchase of ${cart.length} plan(s)`,
-      handler: function (response: any) {
-        console.log("Payment successful:", response);
-        alert("Payment Successful 🎉");
-        
-        window.open(
-          `https://wa.me/91XXXXXXXXXX?text=Hi, I have purchased plans for ₹${total}`,
-          "_blank"
-        );
-        
-        setLoading(false);
-        setCart([]);
-        setShowCart(false);
-        setCoupon("");
-        setDiscount(0);
-      },
-      prefill: {
-        name: "",
-        email: "",
-        contact: "",
-      },
-      theme: {
-        color: "#6366f1",
-      },
-      modal: {
-        ondismiss: function() {
-          setLoading(false);
-        },
-        escape: true,
-        handleback: true
-      }
-    };
-
-    try {
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-
-      rzp.on("payment.failed", function (response: any) {
-        console.error("Payment failed:", response);
-        alert("Payment Failed ❌ Please try again.");
-        setLoading(false);
-      });
-    } catch (error) {
-      console.error("Razorpay error:", error);
-      alert("Payment system error. Please try again.");
-      setLoading(false);
-    }
+    // For paid plans, redirect to payment gateway
+    const selectedPlan = cart[0]; // Get first selected plan
+    localStorage.setItem('selectedPlan', selectedPlan.name);
+    localStorage.setItem('planPrice', selectedPlan.price.toString());
+    window.location.href = '/payment-gateway';
   };
 
   return (
     <div id="payment-plans" className="container">
-      <h1 className="title">Choose Your Plan</h1>
+      <h1 className="title">Choose Your Service Plan</h1>
+      <p className="subtitle">Professional resume services that get you interviews</p>
 
       {/* PLAN CARDS */}
       <div className="grid">
         {plans.map((plan) => (
-          <div key={plan.id} className={`card ${plan.popular ? 'popular' : ''} ${plan.best ? 'best' : ''}`}>
+          <div key={plan.id} className={`card ${plan.popular ? 'popular' : ''} ${plan.best ? 'best' : ''} ${plan.type === 'free' ? 'free' : ''}`}>
             {plan.popular && <div className="badge popular-badge">Most Popular</div>}
             {plan.best && <div className="badge best-badge">Best Value</div>}
+            {plan.type === 'free' && <div className="badge free-badge">FREE</div>}
             
             <h2>{plan.name}</h2>
-            <p className="price">₹{plan.price}</p>
+            <p className="price">
+              {plan.price === 0 ? 'FREE' : `₹${plan.price}`}
+            </p>
             
             <ul className="features">
               {plan.features.map((feature, idx) => (
@@ -205,11 +141,16 @@ export default function PaymentPlans() {
             </ul>
 
             <button
-              className="btn"
+              className={`btn ${plan.type === 'free' ? 'free-btn' : ''}`}
               onClick={() => addToCart(plan)}
               disabled={cart.some((item) => item.id === plan.id)}
             >
-              {cart.some((item) => item.id === plan.id) ? "In Cart ✓" : "Choose This Plan"}
+              {cart.some((item) => item.id === plan.id) ? 
+                "In Cart ✓" : 
+                plan.type === 'free' ? 
+                "Get Free Review" : 
+                "Choose This Plan"
+              }
             </button>
           </div>
         ))}
@@ -227,7 +168,9 @@ export default function PaymentPlans() {
               <div key={item.id} className="cart-item">
                 <div className="cart-item-info">
                   <span className="item-name">{item.name}</span>
-                  <span className="item-price">₹{item.price}</span>
+                  <span className="item-price">
+                    {item.price === 0 ? 'FREE' : `₹${item.price}`}
+                  </span>
                 </div>
                 <button 
                   className="remove-btn"
@@ -239,56 +182,28 @@ export default function PaymentPlans() {
             ))}
 
             <div className="price-breakdown">
-              <div className="price-row">
-                <span>Subtotal:</span>
-                <span>₹{subtotal}</span>
-              </div>
-              
-              {discount > 0 && (
-                <div className="price-row discount">
-                  <span>Discount:</span>
-                  <span>-₹{discount}</span>
-                </div>
-              )}
-              
-              <div className="price-row">
-                <span>GST (18%):</span>
-                <span>₹{gst}</span>
-              </div>
-              
               <div className="price-row total">
                 <span>Total:</span>
-                <span>₹{total}</span>
+                <span>{subtotal === 0 ? 'FREE' : `₹${total}`}</span>
               </div>
-            </div>
-
-            {/* COUPON SECTION */}
-            <div className="coupon-section">
-              <input
-                type="text"
-                placeholder="Coupon code"
-                className="coupon-input"
-                value={coupon}
-                onChange={(e) => setCoupon(e.target.value)}
-              />
-              <button className="apply-btn" onClick={applyCoupon}>
-                Apply
-              </button>
             </div>
 
             <button 
               className="pay-btn" 
               onClick={handlePayment}
-              disabled={loading || cart.length === 0}
+              disabled={cart.length === 0}
             >
-              {loading ? "Processing..." : `Place Order - ₹${total}`}
+              {subtotal === 0 ? 
+               "Get Free Review" : 
+               `Place Order - ₹${total}`
+              }
             </button>
           </div>
 
           {/* RIGHT - SUGGESTIONS */}
           <div className="cart-right">
-            <h3>We feel you must consider these</h3>
-            <p className="suggest-desc">Add more services to get better value!</p>
+            <h3>Upgrade Your Results</h3>
+            <p className="suggest-desc">Add more services for complete career transformation!</p>
 
             {plans.map((plan) => (
               <label key={plan.id} className="suggest-item">
@@ -299,13 +214,15 @@ export default function PaymentPlans() {
                 />
                 <div className="suggest-content">
                   <span className="suggest-name">{plan.name}</span>
-                  <span className="suggest-price">₹{plan.price}</span>
+                  <span className="suggest-price">
+                    {plan.price === 0 ? 'FREE' : `₹${plan.price}`}
+                  </span>
                 </div>
               </label>
             ))}
 
             <div className="savings-info">
-              <p>💡 Save up to 20% with combo plans!</p>
+              <p>💡 95% of our clients get interview calls!</p>
             </div>
           </div>
         </div>

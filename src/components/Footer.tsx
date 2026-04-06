@@ -32,7 +32,7 @@ function Footer() {
               <span>💬</span>
             </a>
             <a
-              href="mailto:technicalpurnima123@oksbi.com?subject=Resume / Career Profile Requirement"
+              href="mailto:resumereadystack@gmail.com?subject=Resume / Career Profile Requirement"
               className="footer-social-link"
               aria-label="Email"
               target="_blank"
@@ -96,8 +96,8 @@ function Footer() {
           <div className="footer-contact">
             <div className="footer-contact-item">
               <div className="footer-contact-icon">📧</div>
-              <a href="mailto:technicalpurnima123@oksbi.com" className="footer-contact-link">
-                technicalpurnima123@oksbi.com
+              <a href="mailto:resumereadystack@gmail.com" className="footer-contact-link">
+              resumereadystack@gmail.com
               </a>
             </div>
             <div className="footer-contact-item">

@@ -4,327 +4,113 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 require('dotenv').config();
 
-// Initialize Express app
+const connectDB = require('./config/db');
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware
-app.use(helmet()); // Security headers
-app.use(cors()); // Enable CORS
-app.use(morgan('dev')); // Logger
-app.use(express.json()); // Parse JSON bodies
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+// Connect to MongoDB
+connectDB();
 
-// Data (In production, this would come from a database)
+// Middleware
+app.use(helmet({ contentSecurityPolicy: false }));
+app.use(cors({ origin: '*', credentials: true }));
+app.use(morgan('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Static data (used when DB is not connected)
 const services = [
-  { id: 1, name: "Resume Review", price: 199, description: "Professional resume review with ATS optimization tips" },
-  { id: 2, name: "LinkedIn Optimization", price: 299, description: "Complete LinkedIn profile optimization" },
-  { id: 3, name: "Portfolio Website", price: 999, description: "Personal portfolio website development" },
-  { id: 4, name: "Cover Letter Writing", price: 149, description: "Professional cover letter writing" },
-  { id: 5, name: "Interview Preparation", price: 499, description: "Mock interviews and preparation coaching" }
+  { id: 1, name: 'ATS Resume Writing', price: 1999, category: 'resume', icon: '📄', description: 'Professional ATS-optimized resume tailored to your target role.', features: ['ATS Keyword Optimization', 'Professional Formatting', 'Tailored to Job Role', 'Unlimited Revisions'], duration: '3-5 days', popular: false },
+  { id: 2, name: 'LinkedIn Profile Optimization', price: 1499, category: 'linkedin', icon: '💼', description: 'Boost your LinkedIn presence and get noticed by recruiters.', features: ['Keyword-Rich Headline', 'Compelling Summary', 'Skills & Endorsements', 'Profile Photo Tips'], duration: '2-3 days', popular: true },
+  { id: 3, name: 'Cover Letter Writing', price: 799, category: 'cover', icon: '✉️', description: 'Compelling cover letters that get you through the door.', features: ['Tailored to Each Job', 'ATS-Friendly Format', 'Storytelling Approach', 'Highlight Key Achievements'], duration: '1-2 days', popular: false },
+  { id: 4, name: 'Complete Career Package', price: 3999, category: 'package', icon: '🚀', description: 'Everything you need to transform your career profile.', features: ['ATS Resume', 'LinkedIn Optimization', 'Cover Letter', 'Interview Prep Guide', 'Job Application Strategy'], duration: '5-7 days', popular: true },
+  { id: 5, name: 'Interview Preparation', price: 2499, category: 'interview', icon: '🎯', description: 'Mock interviews and coaching to land your dream job.', features: ['Mock Interview Sessions', 'Common Q&A Practice', 'Body Language Tips', 'Salary Negotiation'], duration: '4-6 days', popular: false },
+  { id: 6, name: 'Job Search Strategy', price: 1299, category: 'strategy', icon: '🗺️', description: 'Strategic job search plan tailored to your goals.', features: ['Target Company Research', 'Application Tracking', 'Networking Strategy', 'Personal Branding'], duration: '2-3 days', popular: false },
 ];
 
 const plans = [
-  {
-    id: 1,
-    name: "Resume Audit",
-    price: 0,
-    type: "free",
-    features: ["Free Resume Review", "ATS Score Check", "Keyword Analysis", "Format Check"],
-    description: "Get your resume reviewed for free"
-  },
-  {
-    id: 2,
-    name: "ATS Optimization",
-    price: 1999,
-    type: "core",
-    popular: true,
-    features: ["ATS Resume", "Cover Letter", "Keyword Optimization", "Format Fix"],
-    description: "Professional ATS-optimized resume"
-  },
-  {
-    id: 3,
-    name: "Profile Package",
-    price: 2999,
-    type: "premium",
-    features: ["ATS Resume", "LinkedIn Profile", "Cover Letter", "Portfolio Setup"],
-    description: "Complete career profile package"
-  },
-  {
-    id: 4,
-    name: "Complete Career",
-    price: 4999,
-    type: "ultimate",
-    best: true,
-    features: ["ATS Resume", "LinkedIn Profile", "Portfolio Website", "Cover Letter", "Interview Prep", "Job Support"],
-    description: "Ultimate career transformation package"
-  }
+  { id: 1, name: 'Resume Audit', price: 0, type: 'free', badge: 'Free', description: 'Get started with a professional review', features: ['Free Resume Review', 'ATS Score Check', 'Keyword Analysis', 'Basic Format Check'], cta: 'Get Free Audit' },
+  { id: 2, name: 'ATS Optimization', price: 1999, type: 'core', badge: 'Popular', description: 'Professional ATS-optimized resume', features: ['ATS Resume Rewrite', 'Cover Letter', 'Keyword Optimization', 'Format Fix', '2 Revisions'], popular: true, cta: 'Get Started' },
+  { id: 3, name: 'Profile Package', price: 2999, type: 'premium', badge: 'Value', description: 'Complete career profile package', features: ['ATS Resume', 'LinkedIn Profile', 'Cover Letter', 'Portfolio Setup', '3 Revisions'], cta: 'Get Package' },
+  { id: 4, name: 'Complete Career', price: 4999, type: 'ultimate', badge: 'Best Value', description: 'Ultimate career transformation', features: ['ATS Resume', 'LinkedIn Profile', 'Portfolio Website', 'Cover Letter', 'Interview Prep', 'Job Support', 'Unlimited Revisions'], best: true, cta: 'Transform Career' },
 ];
 
-// Store contact messages (In production, use a database)
-let contactMessages = [];
+// Routes
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/orders', require('./routes/orders'));
+app.use('/api/user', require('./routes/user'));
 
-// API Routes
-
-// Health check endpoint
+// Health check
 app.get('/api/health', (req, res) => {
-  res.status(200).json({
-    status: 'OK',
-    message: 'Resume Ready Stack API is running',
-    timestamp: new Date().toISOString(),
-    version: '1.0.0'
-  });
+  res.json({ status: 'OK', message: 'Purnima Career Studio API', timestamp: new Date().toISOString() });
 });
 
-// GET /api/services - Get all services
+// Services
 app.get('/api/services', (req, res) => {
-  try {
-    res.status(200).json({
-      success: true,
-      message: 'Services retrieved successfully',
-      data: services,
-      count: services.length
-    });
-  } catch (error) {
-    console.error('Error fetching services:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: 'Failed to fetch services'
-    });
-  }
+  res.json({ success: true, data: services, count: services.length });
 });
 
-// GET /api/services/:id - Get single service
 app.get('/api/services/:id', (req, res) => {
-  try {
-    const serviceId = parseInt(req.params.id);
-    const service = services.find(s => s.id === serviceId);
-    
-    if (!service) {
-      return res.status(404).json({
-        success: false,
-        message: 'Service not found',
-        error: `Service with ID ${serviceId} does not exist`
-      });
-    }
-    
-    res.status(200).json({
-      success: true,
-      message: 'Service retrieved successfully',
-      data: service
-    });
-  } catch (error) {
-    console.error('Error fetching service:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: 'Failed to fetch service'
-    });
-  }
+  const service = services.find(s => s.id === parseInt(req.params.id));
+  if (!service) return res.status(404).json({ success: false, message: 'Service not found' });
+  res.json({ success: true, data: service });
 });
 
-// POST /api/contact - Handle contact form submissions
-app.post('/api/contact', (req, res) => {
+// Plans
+app.get('/api/plans', (req, res) => {
+  res.json({ success: true, data: plans, count: plans.length });
+});
+
+app.get('/api/plans/:id', (req, res) => {
+  const plan = plans.find(p => p.id === parseInt(req.params.id));
+  if (!plan) return res.status(404).json({ success: false, message: 'Plan not found' });
+  res.json({ success: true, data: plan });
+});
+
+// Contact
+app.post('/api/contact', async (req, res) => {
   try {
     const { name, email, message, phone, service } = req.body;
-    
-    // Validation
     if (!name || !email || !message) {
-      return res.status(400).json({
-        success: false,
-        message: 'Missing required fields',
-        error: 'Name, email, and message are required'
-      });
+      return res.status(400).json({ success: false, message: 'Name, email, and message are required' });
     }
-    
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid email format',
-        error: 'Please provide a valid email address'
-      });
+      return res.status(400).json({ success: false, message: 'Invalid email format' });
     }
-    
-    // Create contact message object
-    const contactMessage = {
-      id: contactMessages.length + 1,
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      message: message.trim(),
-      phone: phone ? phone.trim() : null,
-      service: service ? service.trim() : null,
-      timestamp: new Date().toISOString(),
-      status: 'new'
-    };
-    
-    // Store message (In production, save to database)
-    contactMessages.push(contactMessage);
-    
-    // Log the message (In production, send email/notification)
-    console.log('New contact message:', contactMessage);
-    
-    res.status(201).json({
-      success: true,
-      message: 'Contact form submitted successfully',
-      data: {
-        id: contactMessage.id,
-        name: contactMessage.name,
-        timestamp: contactMessage.timestamp
+
+    // Try saving to MongoDB if connected
+    try {
+      const mongoose = require('mongoose');
+      if (mongoose.connection.readyState === 1) {
+        const Contact = require('./models/Contact');
+        await Contact.create({ name, email, phone, message, serviceInterest: service });
       }
-    });
-    
-  } catch (error) {
-    console.error('Error processing contact form:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: 'Failed to process contact form'
-    });
-  }
-});
-
-// GET /api/contact - Get all contact messages (Admin endpoint)
-app.get('/api/contact', (req, res) => {
-  try {
-    res.status(200).json({
-      success: true,
-      message: 'Contact messages retrieved successfully',
-      data: contactMessages,
-      count: contactMessages.length
-    });
-  } catch (error) {
-    console.error('Error fetching contact messages:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: 'Failed to fetch contact messages'
-    });
-  }
-});
-
-// GET /api/plans - Get all pricing plans
-app.get('/api/plans', (req, res) => {
-  try {
-    res.status(200).json({
-      success: true,
-      message: 'Plans retrieved successfully',
-      data: plans,
-      count: plans.length
-    });
-  } catch (error) {
-    console.error('Error fetching plans:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: 'Failed to fetch plans'
-    });
-  }
-});
-
-// GET /api/plans/:id - Get single plan
-app.get('/api/plans/:id', (req, res) => {
-  try {
-    const planId = parseInt(req.params.id);
-    const plan = plans.find(p => p.id === planId);
-    
-    if (!plan) {
-      return res.status(404).json({
-        success: false,
-        message: 'Plan not found',
-        error: `Plan with ID ${planId} does not exist`
-      });
+    } catch (dbErr) {
+      console.log('DB not available, logging contact locally');
     }
-    
-    res.status(200).json({
-      success: true,
-      message: 'Plan retrieved successfully',
-      data: plan
-    });
+
+    console.log('New contact:', { name, email, message: message.substring(0, 50) });
+    res.status(201).json({ success: true, message: 'Message received! We will contact you within 24 hours.' });
   } catch (error) {
-    console.error('Error fetching plan:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: 'Failed to fetch plan'
-    });
+    res.status(500).json({ success: false, message: 'Failed to send message' });
   }
 });
 
-// POST /api/payments/webhook - Razorpay webhook handler
-app.post('/api/payments/webhook', (req, res) => {
-  try {
-    const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
-    
-    // Verify webhook signature (In production)
-    // const signature = req.headers['x-razorpay-signature'];
-    // const expectedSignature = crypto.createHmac('sha256', webhookSecret)
-    //   .update(JSON.stringify(req.body))
-    //   .digest('hex');
-    
-    console.log('Payment webhook received:', req.body);
-    
-    // Process payment event
-    const event = req.body;
-    
-    switch (event.event) {
-      case 'payment.captured':
-        console.log('Payment captured:', event.payload.payment.entity);
-        // Update database, send confirmation email, etc.
-        break;
-      case 'payment.failed':
-        console.log('Payment failed:', event.payload.payment.entity);
-        // Handle failed payment
-        break;
-      default:
-        console.log('Unknown webhook event:', event.event);
-    }
-    
-    res.status(200).json({
-      success: true,
-      message: 'Webhook processed successfully'
-    });
-    
-  } catch (error) {
-    console.error('Error processing webhook:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: 'Failed to process webhook'
-    });
-  }
-});
-
-// Error handling middleware
+// Error handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({
-    success: false,
-    message: 'Something went wrong!',
-    error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
-  });
+  res.status(500).json({ success: false, message: 'Something went wrong!' });
 });
 
-// 404 handler
 app.use('*', (req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Route not found',
-    error: `Cannot ${req.method} ${req.originalUrl}`
-  });
+  res.status(404).json({ success: false, message: `Cannot ${req.method} ${req.originalUrl}` });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Resume Ready Stack API Server running on port ${PORT}`);
-  console.log(`📡 Server URL: http://localhost:${PORT}`);
-  console.log(`📊 Health Check: http://localhost:${PORT}/api/health`);
-  console.log(`📝 Services API: http://localhost:${PORT}/api/services`);
-  console.log(`💰 Plans API: http://localhost:${PORT}/api/plans`);
-  console.log(`📧 Contact API: http://localhost:${PORT}/api/contact`);
-  console.log('🎯 Server started successfully!');
+app.listen(PORT, 'localhost', () => {
+  console.log(`🚀 Purnima Career Studio API running on port ${PORT}`);
+  console.log(`📡 Health: http://localhost:${PORT}/api/health`);
 });
 
 module.exports = app;

@@ -1,52 +1,33 @@
-const jwt = require('jsonwebtoken')
-const Admin = require('../models/Admin')
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-// Protect routes - verify JWT token
+const JWT_SECRET = process.env.JWT_SECRET || 'purnima-career-studio-secret-2024';
+
 exports.protect = async (req, res, next) => {
   try {
-    let token
-
-    // Check for token in headers
+    let token;
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-      token = req.headers.authorization.split(' ')[1]
+      token = req.headers.authorization.split(' ')[1];
     }
-
     if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: 'Not authorized, no token provided'
-      })
+      return res.status(401).json({ success: false, message: 'Not authorized, no token' });
     }
-
-    try {
-      // Verify token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret')
-
-      // Get admin from token
-      req.admin = await Admin.findById(decoded.id).select('-password')
-
-      if (!req.admin) {
-        return res.status(401).json({
-          success: false,
-          message: 'Admin not found'
-        })
-      }
-
-      next()
-    } catch (error) {
-      return res.status(401).json({
-        success: false,
-        message: 'Not authorized, token failed'
-      })
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = await User.findById(decoded.id).select('-password');
+    if (!req.user) {
+      return res.status(401).json({ success: false, message: 'User not found' });
     }
+    next();
   } catch (error) {
-    console.error('Auth middleware error:', error)
-    res.status(500).json({
-      success: false,
-      message: 'Authentication error',
-      error: error.message
-    })
+    return res.status(401).json({ success: false, message: 'Token invalid or expired' });
   }
-}
+};
 
+exports.adminOnly = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') return next();
+  return res.status(403).json({ success: false, message: 'Admin access required' });
+};
 
+exports.generateToken = (id) => {
+  return jwt.sign({ id }, JWT_SECRET, { expiresIn: '30d' });
+};

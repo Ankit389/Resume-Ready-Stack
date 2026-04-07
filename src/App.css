@@ -1,18 +1,5 @@
-.app {
-  width: 100%;
+/* App-level resets */
+#root {
   min-height: 100vh;
+  background: #060612;
 }
-
-.home {
-  width: 100%;
-}
-
-
-
-
-
-
-
-
-
-

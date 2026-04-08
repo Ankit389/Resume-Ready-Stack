@@ -1,0 +1,87 @@
+Analyze my entire project and fix all UI, CSS, and layout issues.
+
+Current problems:
+- No spacing between cards and sections
+- Text alignment is broken
+- UI looks unprofessional
+- Colors are inconsistent
+- Layout is not responsive
+- Elements are overlapping
+- CSS is messy and poorly structured
+
+Tasks:
+
+1. COMPLETE CSS REFACTOR:
+- Remove all broken and conflicting CSS
+- Replace with clean Tailwind CSS system
+- Do NOT use inline styles
+- Create a consistent design system
+
+2. DESIGN SYSTEM:
+- Background: #0F172A (dark)
+- Cards: #1E293B
+- Primary: #6C63FF (purple gradient)
+- Secondary: #00C9A7 (teal)
+- Text: #E2E8F0
+- Muted text: #94A3B8
+
+3. SPACING FIX:
+- Add proper section spacing (py-16 or py-20)
+- Add gap between cards (gap-6 or gap-8)
+- Add padding inside cards (p-6 or p-8)
+- Ensure proper whitespace everywhere
+
+4. LAYOUT FIX:
+- Use max-width container (max-w-7xl mx-auto px-4)
+- Use grid system:
+  - Mobile: 1 column
+  - Tablet: 2 columns
+  - Desktop: 3 columns
+- Fix alignment using flexbox
+
+5. PRICING SECTION FIX:
+- Create clean pricing cards
+- No overlapping elements
+- Highlight best plan
+- Add hover effects
+- Proper button alignment
+
+6. NAVBAR FIX:
+- Sticky navbar
+- Proper spacing between links
+- Logo left, menu center, buttons right
+- Mobile responsive menu
+
+7. TYPOGRAPHY:
+- Headings: bold, large (text-3xl to text-5xl)
+- Subheadings: medium size
+- Body text: clean and readable
+- Proper line spacing
+
+8. BUTTON DESIGN:
+- Gradient buttons (purple to teal)
+- Padding: px-6 py-3
+- Rounded-xl
+- Hover scale effect
+
+9. RESPONSIVENESS:
+- Fully responsive for mobile, tablet, desktop
+- No overflow issues
+- Proper stacking of elements
+
+10. REMOVE BAD CODE:
+- Remove unnecessary absolute positioning
+- Fix z-index issues
+- Remove duplicate styles
+
+11. ADD MODERN UI:
+- Rounded corners (rounded-2xl)
+- Shadows (shadow-lg)
+- Smooth transitions (transition-all duration-300)
+- Hover animations
+
+Final goal:
+Make the website look like a premium SaaS product with clean UI, proper spacing, modern design, and excellent user experience.
+
+Fix all pages:
+Home, About, Services, Pricing, Contact.

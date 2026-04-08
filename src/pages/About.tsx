@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Award, CheckCircle, Heart, Target, Users, ArrowRight, Globe, Mail } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { Card, CardContent } from '../components/ui/card';
 
 const milestones = [
   { year: '2019', title: 'Started Career Coaching',  desc: 'Began helping freshers with resume writing while working in HR.' },
@@ -18,66 +17,73 @@ const values = [
 ];
 
 const skills = [
-  { skill: 'ATS Resume Optimization',  level: 98 },
-  { skill: 'LinkedIn Profile Building', level: 95 },
-  { skill: 'Cover Letter Writing',      level: 90 },
-  { skill: 'Interview Coaching',        level: 88 },
-  { skill: 'Job Search Strategy',       level: 92 },
-  { skill: 'Personal Branding',         level: 87 },
+  { skill: 'ATS Resume Optimization',   level: 98 },
+  { skill: 'LinkedIn Profile Building',  level: 95 },
+  { skill: 'Cover Letter Writing',       level: 90 },
+  { skill: 'Interview Coaching',         level: 88 },
+  { skill: 'Job Search Strategy',        level: 92 },
+  { skill: 'Personal Branding',          level: 87 },
 ];
+
+const CARD: React.CSSProperties = {
+  background: '#1E293B',
+  border: '1px solid rgba(255,255,255,0.08)',
+  borderRadius: 16,
+};
 
 export default function About() {
   return (
-    <div className="min-h-screen" style={{ background: '#0F172A' }}>
+    <div style={{ background: '#0F172A', minHeight: '100vh' }}>
 
       {/* Hero */}
-      <section className="relative py-24 overflow-hidden">
-        <div className="glow-orb w-96 h-96 bg-[#6C63FF] top-0 right-0" style={{ opacity: 0.08 }} />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <section className="section" style={{ position: 'relative', overflow: 'hidden' }}>
+        <div className="glow-orb" style={{ width: 360, height: 360, background: '#6C63FF', top: -60, right: 0, opacity: 0.07 }} />
+        <div className="container-page">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 56, alignItems: 'center' }}>
             <div className="animate-fade-in-up">
-              <div className="section-tag mb-4">About Us</div>
-              <h1 className="text-5xl font-black text-white mb-6 leading-tight">
+              <div className="section-tag" style={{ marginBottom: 14 }}>About Us</div>
+              <h1 className="heading-xl" style={{ marginBottom: 18 }}>
                 Meet <span className="gradient-text">Purnima Rani</span>
                 <br />Your Career Growth Partner
               </h1>
-              <p className="text-[#94A3B8] leading-relaxed mb-5">
+              <p className="body-lg" style={{ marginBottom: 16 }}>
                 With 5+ years of experience in HR and career consulting, I specialize in crafting ATS-optimized resumes and LinkedIn profiles that get professionals noticed by top employers across India.
               </p>
-              <p className="text-[#94A3B8] leading-relaxed mb-8">
-                I've helped freshers, mid-level professionals, and senior executives find their dream jobs. My approach is deeply personal — I take time to understand your unique strengths and translate them into compelling career narratives.
+              <p className="body-lg" style={{ marginBottom: 32 }}>
+                I've helped freshers, mid-level professionals, and senior executives find their dream jobs with a deeply personal approach.
               </p>
-              <div className="flex flex-wrap gap-3">
+              <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
                 <Link to="/contact">
-                  <Button size="lg" variant="glow">Work With Me <ArrowRight className="w-4 h-4" /></Button>
+                  <Button size="lg" variant="glow">Work With Me <ArrowRight style={{ width: 17, height: 17 }} /></Button>
                 </Link>
                 <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" variant="outline"><Globe className="w-4 h-4" /> LinkedIn</Button>
+                  <Button size="lg" variant="outline"><Globe style={{ width: 16, height: 16 }} /> LinkedIn</Button>
                 </a>
               </div>
             </div>
 
-            <div className="relative">
-              <div
-                className="rounded-3xl overflow-hidden aspect-[4/5] flex items-center justify-center"
-                style={{ background: '#1E293B', border: '1px solid rgba(255,255,255,0.08)' }}
-              >
-                <img
-                  src="/purnima-rani.png" alt="Purnima Rani"
-                  className="w-full h-full object-cover object-top"
-                  onError={e => {
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.parentElement!.innerHTML = `<div class="flex flex-col items-center justify-center gap-4 p-12"><div class="w-32 h-32 rounded-full flex items-center justify-center text-white text-5xl font-bold" style="background:linear-gradient(135deg,#6C63FF,#00C9A7)">P</div><p class="text-white text-xl font-bold">Purnima Rani</p><p class="text-center text-sm" style="color:#64748B">Career Profile Specialist<br/>HR & Resume Expert</p></div>`;
-                  }}
-                />
+            <div style={{ position: 'relative' }}>
+              <div style={{
+                ...CARD, borderRadius: 24, overflow: 'hidden',
+                aspectRatio: '4/5', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, padding: 48 }}>
+                  <div style={{
+                    width: 120, height: 120, borderRadius: '50%', display: 'flex', alignItems: 'center',
+                    justifyContent: 'center', fontSize: '3rem', fontWeight: 900, color: '#fff',
+                    background: 'linear-gradient(135deg, #6C63FF, #00C9A7)',
+                  }}>P</div>
+                  <p style={{ color: '#fff', fontSize: '1.25rem', fontWeight: 700 }}>Purnima Rani</p>
+                  <p style={{ color: '#64748B', fontSize: '0.875rem', textAlign: 'center' }}>Career Profile Specialist<br />HR & Resume Expert</p>
+                </div>
               </div>
-              <div className="absolute -bottom-4 -right-4 rounded-2xl p-4 shadow-2xl" style={{ background: '#1E293B', border: '1px solid rgba(108,99,255,0.3)' }}>
-                <div className="text-2xl font-black gradient-text">500+</div>
-                <div className="text-xs" style={{ color: '#64748B' }}>Happy Clients</div>
+              <div style={{ position: 'absolute', bottom: -16, right: -16, ...CARD, border: '1px solid rgba(108,99,255,0.3)', padding: 16, borderRadius: 16 }}>
+                <div className="gradient-text" style={{ fontSize: '1.5rem', fontWeight: 900 }}>500+</div>
+                <div style={{ fontSize: '0.78rem', color: '#64748B' }}>Happy Clients</div>
               </div>
-              <div className="absolute -top-4 -left-4 rounded-2xl p-4 shadow-2xl" style={{ background: '#1E293B', border: '1px solid rgba(0,201,167,0.3)' }}>
-                <div className="text-2xl font-black" style={{ color: '#00C9A7' }}>94%</div>
-                <div className="text-xs" style={{ color: '#64748B' }}>Interview Rate</div>
+              <div style={{ position: 'absolute', top: -16, left: -16, ...CARD, border: '1px solid rgba(0,201,167,0.3)', padding: 16, borderRadius: 16 }}>
+                <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#00C9A7' }}>94%</div>
+                <div style={{ fontSize: '0.78rem', color: '#64748B' }}>Interview Rate</div>
               </div>
             </div>
           </div>
@@ -85,50 +91,58 @@ export default function About() {
       </section>
 
       {/* Values */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="section-tag mx-auto w-fit mb-4">My Values</div>
-            <h2 className="text-4xl font-black text-white">What Drives <span className="gradient-text">My Work</span></h2>
+      <section className="section">
+        <div className="container-page">
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <div className="section-tag" style={{ marginBottom: 14, display: 'inline-flex' }}>My Values</div>
+            <h2 className="heading-lg">What Drives <span className="gradient-text">My Work</span></h2>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 20 }}>
             {values.map(({ icon: Icon, title, desc }) => (
-              <Card key={title} className="text-center">
-                <CardContent className="p-6">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ background: 'linear-gradient(135deg, rgba(108,99,255,0.2), rgba(0,201,167,0.2))', border: '1px solid rgba(108,99,255,0.3)' }}>
-                    <Icon className="w-6 h-6" style={{ color: '#6C63FF' }} />
-                  </div>
-                  <h3 className="text-white font-bold mb-2">{title}</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: '#94A3B8' }}>{desc}</p>
-                </CardContent>
-              </Card>
+              <div key={title} style={{ ...CARD, padding: 24, textAlign: 'center' }}>
+                <div style={{
+                  width: 48, height: 48, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  margin: '0 auto 16px',
+                  background: 'linear-gradient(135deg, rgba(108,99,255,0.18), rgba(0,201,167,0.18))',
+                  border: '1px solid rgba(108,99,255,0.28)',
+                }}>
+                  <Icon style={{ width: 22, height: 22, color: '#6C63FF' }} />
+                </div>
+                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#fff', marginBottom: 8 }}>{title}</h3>
+                <p style={{ fontSize: '0.875rem', color: '#94A3B8', lineHeight: 1.6 }}>{desc}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Timeline */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <div className="section-tag mx-auto w-fit mb-4">Journey</div>
-            <h2 className="text-4xl font-black text-white">My <span className="gradient-text">Career Story</span></h2>
+      <section className="section">
+        <div className="container-narrow">
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <div className="section-tag" style={{ marginBottom: 14, display: 'inline-flex' }}>Journey</div>
+            <h2 className="heading-lg">My <span className="gradient-text">Career Story</span></h2>
           </div>
-          <div className="relative">
-            <div className="absolute left-8 top-0 bottom-0 w-px" style={{ background: 'linear-gradient(to bottom, #6C63FF, #00C9A7)' }} />
-            <div className="space-y-8">
+          <div style={{ position: 'relative' }}>
+            <div style={{
+              position: 'absolute', left: 24, top: 0, bottom: 0, width: 1,
+              background: 'linear-gradient(to bottom, #6C63FF, #00C9A7)',
+            }} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
               {milestones.map(({ year, title, desc }, i) => (
-                <div key={year} className="relative flex gap-8 pl-20 animate-fade-in-up" style={{ animationDelay: `${i * 0.1}s` }}>
-                  <div
-                    className="absolute left-4 top-3 w-8 h-8 rounded-full flex items-center justify-center shadow-lg"
-                    style={{ background: 'linear-gradient(135deg, #6C63FF, #00C9A7)', border: '2px solid #0F172A', boxShadow: '0 0 16px rgba(108,99,255,0.4)' }}
-                  >
-                    <div className="w-2 h-2 rounded-full bg-white" />
+                <div key={year} className="animate-fade-in-up" style={{ display: 'flex', gap: 32, paddingLeft: 68, animationDelay: `${i * 0.1}s` }}>
+                  <div style={{
+                    position: 'absolute', left: 12, width: 24, height: 24, borderRadius: '50%',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: 'linear-gradient(135deg, #6C63FF, #00C9A7)',
+                    border: '2px solid #0F172A', boxShadow: '0 0 16px rgba(108,99,255,0.4)',
+                  }}>
+                    <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#fff' }} />
                   </div>
-                  <div className="rounded-2xl p-5 flex-1" style={{ background: '#1E293B', border: '1px solid rgba(255,255,255,0.07)' }}>
-                    <div className="text-sm font-bold mb-1" style={{ color: '#6C63FF' }}>{year}</div>
-                    <div className="text-white font-bold mb-1">{title}</div>
-                    <div className="text-sm" style={{ color: '#94A3B8' }}>{desc}</div>
+                  <div style={{ ...CARD, padding: 20, flex: 1 }}>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#6C63FF', marginBottom: 4 }}>{year}</div>
+                    <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fff', marginBottom: 4 }}>{title}</div>
+                    <div style={{ fontSize: '0.85rem', color: '#94A3B8' }}>{desc}</div>
                   </div>
                 </div>
               ))}
@@ -138,23 +152,20 @@ export default function About() {
       </section>
 
       {/* Skills */}
-      <section className="py-20">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-black text-white">Areas of <span className="gradient-text">Expertise</span></h2>
-          </div>
-          <div className="grid md:grid-cols-2 gap-6">
+      <section className="section">
+        <div className="container-page">
+          <h2 className="heading-lg" style={{ textAlign: 'center', marginBottom: 48 }}>
+            Areas of <span className="gradient-text">Expertise</span>
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
             {skills.map(({ skill, level }) => (
-              <div key={skill} className="space-y-2.5">
-                <div className="flex justify-between text-sm">
-                  <span className="text-[#E2E8F0] font-medium">{skill}</span>
-                  <span style={{ color: '#6C63FF' }}>{level}%</span>
+              <div key={skill}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                  <span style={{ fontSize: '0.9rem', fontWeight: 500, color: '#E2E8F0' }}>{skill}</span>
+                  <span style={{ fontSize: '0.875rem', color: '#6C63FF' }}>{level}%</span>
                 </div>
-                <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
-                  <div
-                    className="h-full rounded-full transition-all duration-1000"
-                    style={{ width: `${level}%`, background: 'linear-gradient(to right, #6C63FF, #00C9A7)' }}
-                  />
+                <div style={{ height: 8, borderRadius: 99, background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
+                  <div style={{ width: `${level}%`, height: '100%', borderRadius: 99, background: 'linear-gradient(to right, #6C63FF, #00C9A7)' }} />
                 </div>
               </div>
             ))}
@@ -163,15 +174,17 @@ export default function About() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 pb-28">
-        <div className="max-w-3xl mx-auto px-4 text-center">
-          <div className="rounded-3xl p-10 relative overflow-hidden" style={{ background: '#1E293B', border: '1px solid rgba(108,99,255,0.2)' }}>
-            <div className="glow-orb w-64 h-64 bg-[#6C63FF] top-0 left-1/2 -translate-x-1/2" style={{ opacity: 0.12 }} />
-            <div className="relative z-10">
-              <h2 className="text-3xl font-black text-white mb-4">Ready to Work Together?</h2>
-              <p className="mb-8" style={{ color: '#94A3B8' }}>Let's craft a career profile that opens doors to your dream opportunities.</p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/contact"><Button size="lg" variant="glow">Get In Touch <Mail className="w-4 h-4" /></Button></Link>
+      <section className="section">
+        <div className="container-narrow">
+          <div style={{ ...CARD, border: '1.5px solid rgba(108,99,255,0.25)', borderRadius: 24, padding: '56px 40px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+            <div className="glow-orb" style={{ width: 260, height: 260, background: '#6C63FF', top: -80, left: '50%', transform: 'translateX(-50%)', opacity: 0.12 }} />
+            <div style={{ position: 'relative', zIndex: 10 }}>
+              <h2 className="heading-md" style={{ marginBottom: 12 }}>Ready to Work Together?</h2>
+              <p className="body-lg" style={{ marginBottom: 32 }}>
+                Let's craft a career profile that opens doors to your dream opportunities.
+              </p>
+              <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
+                <Link to="/contact"><Button size="lg" variant="glow">Get In Touch <Mail style={{ width: 16, height: 16 }} /></Button></Link>
                 <Link to="/pricing"><Button size="lg" variant="secondary">View Pricing</Button></Link>
               </div>
             </div>

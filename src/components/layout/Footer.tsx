@@ -23,52 +23,61 @@ const footerLinks = {
 export default function Footer() {
   return (
     <footer style={{ background: '#0A1120', borderTop: '1px solid rgba(255,255,255,0.07)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
+      <div className="container-page" style={{ paddingTop: 64, paddingBottom: 32 }}>
+
+        {/* Top grid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+          gap: 40,
+          marginBottom: 48,
+        }}>
 
           {/* Brand */}
-          <div className="lg:col-span-2">
-            <Link to="/" className="flex items-center gap-3 mb-5 w-fit">
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
-                style={{ background: 'linear-gradient(135deg, #6C63FF, #00C9A7)', boxShadow: '0 0 20px rgba(108,99,255,0.3)' }}
-              >
-                <FileText className="w-5 h-5 text-white" />
+          <div style={{ gridColumn: 'span 1' }}>
+            <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 12, marginBottom: 16, textDecoration: 'none' }}>
+              <div style={{
+                width: 40, height: 40, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: 'linear-gradient(135deg, #6C63FF, #00C9A7)', boxShadow: '0 0 20px rgba(108,99,255,0.3)',
+              }}>
+                <FileText style={{ width: 20, height: 20, color: '#fff' }} />
               </div>
               <div>
-                <span className="font-bold text-white text-[15px] leading-tight block">Resume Ready Stack</span>
-                <span className="text-xs" style={{ color: '#6C63FF' }}>Career Profile Specialist</span>
+                <span style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem', display: 'block', lineHeight: 1.2 }}>Resume Ready Stack</span>
+                <span style={{ fontSize: '0.72rem', color: '#6C63FF' }}>Career Profile Specialist</span>
               </div>
             </Link>
-            <p className="text-sm leading-relaxed mb-6 max-w-xs" style={{ color: '#64748B' }}>
+            <p style={{ fontSize: '0.85rem', color: '#64748B', lineHeight: 1.7, marginBottom: 20, maxWidth: 260 }}>
               Helping professionals land their dream jobs with ATS-optimized resumes, LinkedIn profiles, and career coaching.
             </p>
-            <div className="space-y-3">
-              <a href="mailto:technicalpurnima123@oksbi.com" className="flex items-center gap-2.5 text-sm transition-colors group" style={{ color: '#64748B' }}>
-                <Mail className="w-4 h-4 flex-shrink-0 group-hover:text-[#6C63FF] transition-colors" />
-                <span className="group-hover:text-[#E2E8F0] transition-colors">technicalpurnima123@oksbi.com</span>
-              </a>
-              <a href="tel:+919876543210" className="flex items-center gap-2.5 text-sm transition-colors group" style={{ color: '#64748B' }}>
-                <Phone className="w-4 h-4 flex-shrink-0 group-hover:text-[#6C63FF] transition-colors" />
-                <span className="group-hover:text-[#E2E8F0] transition-colors">+91 98765 43210</span>
-              </a>
-              <span className="flex items-center gap-2.5 text-sm" style={{ color: '#64748B' }}>
-                <MapPin className="w-4 h-4 flex-shrink-0" /> India (Remote Services)
-              </span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {[
+                { icon: Mail,   text: 'technicalpurnima123@oksbi.com', href: 'mailto:technicalpurnima123@oksbi.com' },
+                { icon: Phone,  text: '+91 98765 43210',               href: 'tel:+919876543210' },
+                { icon: MapPin, text: 'India (Remote Services)',        href: null },
+              ].map(({ icon: Icon, text, href }) => (
+                <div key={text} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Icon style={{ width: 14, height: 14, color: '#64748B', flexShrink: 0 }} />
+                  {href
+                    ? <a href={href} style={{ fontSize: '0.82rem', color: '#64748B', textDecoration: 'none' }}>{text}</a>
+                    : <span style={{ fontSize: '0.82rem', color: '#64748B' }}>{text}</span>}
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Links */}
+          {/* Link columns */}
           {Object.entries(footerLinks).map(([heading, links]) => (
             <div key={heading}>
-              <h4 className="text-white font-semibold mb-5 text-sm tracking-wide">{heading}</h4>
-              <ul className="space-y-3">
+              <h4 style={{ color: '#fff', fontWeight: 600, fontSize: '0.9rem', marginBottom: 18, letterSpacing: '0.02em' }}>{heading}</h4>
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}>
                 {links.map(({ label, path }) => (
                   <li key={label}>
                     <Link
                       to={path}
-                      className="text-sm transition-colors hover:text-[#6C63FF]"
-                      style={{ color: '#64748B' }}
+                      style={{ fontSize: '0.85rem', color: '#64748B', textDecoration: 'none', transition: 'color 0.2s' }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#6C63FF'; }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#64748B'; }}
                     >
                       {label}
                     </Link>
@@ -79,26 +88,27 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className="divider mb-6" />
+        {/* Divider */}
+        <div className="divider" style={{ marginBottom: 24 }} />
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm" style={{ color: '#475569' }}>
+        {/* Bottom bar */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
+          <p style={{ fontSize: '0.82rem', color: '#475569' }}>
             © 2024 Resume Ready Stack. All rights reserved.
           </p>
-          <div className="flex items-center gap-2.5">
+          <div style={{ display: 'flex', gap: 10 }}>
             {[Share2, Globe, ExternalLink].map((Icon, i) => (
               <button
                 key={i}
-                className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 hover:-translate-y-0.5"
                 style={{
-                  background: 'rgba(30,41,59,0.8)',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  color: '#64748B',
+                  width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: 'rgba(30,41,59,0.8)', border: '1px solid rgba(255,255,255,0.08)',
+                  color: '#64748B', cursor: 'pointer', transition: 'color 0.2s',
                 }}
-                onMouseEnter={e => (e.currentTarget.style.color = '#6C63FF')}
-                onMouseLeave={e => (e.currentTarget.style.color = '#64748B')}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#6C63FF'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#64748B'; }}
               >
-                <Icon className="w-4 h-4" />
+                <Icon style={{ width: 15, height: 15 }} />
               </button>
             ))}
           </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Check, ArrowRight, ChevronDown, Zap } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -64,8 +64,11 @@ const CARD: React.CSSProperties = {
 };
 
 export default function Pricing() {
-  const [plans, setPlans]     = useState(defaultPlans);
+  const [plans, setPlans] = useState(defaultPlans);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const templateParam = searchParams.get('template') || '';
 
   useEffect(() => {
     plansAPI.getAll().then(r => {
@@ -74,7 +77,7 @@ export default function Pricing() {
   }, []);
 
   return (
-    <div style={{ background: '#0F172A', minHeight: '100vh' }}>
+    <div>
 
       {/* ── Hero ── */}
       <section
@@ -172,8 +175,8 @@ export default function Pricing() {
 
                 <Link
                   to={plan.price === 0
-                    ? '/contact'
-                    : `/checkout?plan=${encodeURIComponent(plan.name)}&price=${plan.price}&id=${plan.id}`}
+                    ? `/contact${templateParam ? `?template=${encodeURIComponent(templateParam)}` : ''}`
+                    : `/checkout?plan=${encodeURIComponent(plan.name)}&price=${plan.price}&id=${plan.id}${templateParam ? `&template=${encodeURIComponent(templateParam)}` : ''}`}
                   style={{ display: 'block' }}
                 >
                   <Button
@@ -204,10 +207,13 @@ export default function Pricing() {
 
       {/* ── Comparison Table ── */}
       <section style={{ paddingTop: 64, paddingBottom: 64 }}>
-        <div className="container-page">
+        <div className="container-page" style={{ position: 'relative', zIndex: 10 }}>
           <h2 className="heading-lg" style={{ textAlign: 'center', marginBottom: 40 }}>
             Feature <span className="gradient-text">Comparison</span>
           </h2>
+          <div className="md:hidden text-center text-xs text-slate-500 mb-3 animate-pulse">
+            Swipe left/right to view all features →
+          </div>
           <div style={{ ...CARD, overflow: 'hidden' }}>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', minWidth: 540, borderCollapse: 'collapse' }}>

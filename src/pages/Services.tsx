@@ -51,7 +51,7 @@ export default function Services() {
   }, [search, activeCategory, services]);
 
   return (
-    <div style={{ background: '#0F172A', minHeight: '100vh' }}>
+    <div>
 
       {/* Hero */}
       <section style={{ position: 'relative', paddingTop: 72, paddingBottom: 48, overflow: 'hidden' }}>

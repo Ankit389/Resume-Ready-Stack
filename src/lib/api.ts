@@ -45,6 +45,27 @@ export const contactAPI = {
     api.post('/contact', data),
 };
 
+export const paymentAPI = {
+  createOrder: (data: {
+    planName: string;
+    planId: string;
+    amount: number;
+    customerName: string;
+    customerEmail: string;
+    customerPhone: string;
+    notes?: Record<string, any>;
+  }) => api.post('/payment/order', data),
+  verifyPayment: (data: {
+    orderId: string;
+    razorpay_payment_id: string;
+    razorpay_order_id: string;
+    razorpay_signature: string;
+    customerName: string;
+    customerEmail: string;
+    customerPhone: string;
+  }) => api.post('/payment/verify', data),
+};
+
 export const userAPI = {
   getProfile: () => api.get('/user/profile'),
   updateProfile: (data: { name?: string; phone?: string }) => api.put('/user/profile', data),

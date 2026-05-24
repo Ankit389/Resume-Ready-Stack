@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, ChangeEvent } from "react"
 import { Check, CreditCard, Shield, Clock, User, Mail, Phone, Building } from 'lucide-react'
+import { paymentAPI } from '../lib/api'
 import './PaymentGateway.css'
 
 declare global {
@@ -30,6 +31,7 @@ function PaymentGateway() {
     agreeTerms: false
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [error, setError] = useState('')
 
   // Get payment data from URL params or localStorage
   useEffect(() => {
@@ -55,6 +57,10 @@ function PaymentGateway() {
         'Complete Career': {
           price: 4999,
           features: ['ATS Resume', 'LinkedIn Profile', 'Portfolio Website', 'Cover Letter', 'Interview Prep', 'Job Support']
+        },
+        'Test Payment': {
+          price: 2,
+          features: ['Test Payment', 'Payment Gateway Check', 'Transaction Verification']
         }
       }
 
@@ -99,7 +105,7 @@ function PaymentGateway() {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
     setFormData(prev => ({
       ...prev,
@@ -112,103 +118,140 @@ function PaymentGateway() {
     }
   }
 
-  const initializePayment = () => {
+  const loadScript = () => new Promise<boolean>((resolve) => {
+    if (window.Razorpay) {
+      resolve(true)
+      return
+    }
+    const script = document.createElement('script')
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+    script.async = true
+    script.onload = () => resolve(true)
+    script.onerror = () => resolve(false)
+    document.body.appendChild(script)
+  })
+
+  const initializePayment = async () => {
     if (!validateForm()) {
       return
     }
 
+    if (!paymentData) {
+      setError('Payment details are missing. Please go back and try again.')
+      return
+    }
+
     setLoading(true)
+    setError('')
 
-    // Load Razorpay script
-    const script = document.createElement('script')
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js'
-    script.async = true
-    script.onload = () => {
-      if (window.Razorpay) {
-        startPayment()
-      }
-    }
-    script.onerror = () => {
+    const loaded = await loadScript()
+    if (!loaded) {
       alert('Payment system is loading. Please try again.')
-      setLoading(false)
-    }
-    document.body.appendChild(script)
-  }
-
-  const startPayment = () => {
-    if (!paymentData || !window.Razorpay) {
       setLoading(false)
       return
     }
 
-    const options = {
-      key: 'rzp_live_SZhDOt8VB6HqYM', // Your live Razorpay key
-      amount: paymentData.planPrice * 100, // Amount in paise
-      currency: 'INR',
-      name: 'Resume Ready Stack',
-      description: `${paymentData.planName} - Professional Resume Service`,
-      image: '/resume-ready-stack-logo.svg',
-      handler: function (response: any) {
-        // Payment successful
-        setPaymentSuccess(true)
-        setLoading(false)
-        
-        // Store payment details
-        const paymentDetails = {
-          razorpay_payment_id: response.razorpay_payment_id,
-          ...paymentData,
-          ...formData,
-          paidAt: new Date().toISOString()
-        }
-        
-        localStorage.setItem('paymentSuccess', JSON.stringify(paymentDetails))
-        
-        // Send confirmation (in real app, this would go to your backend)
-        console.log('Payment successful:', paymentDetails)
-        
-        // Redirect to success page or show success message
-        setTimeout(() => {
-          window.location.href = '/payment-success'
-        }, 3000)
-      },
-      prefill: {
-        name: formData.name,
-        email: formData.email,
-        contact: formData.phone,
-      },
-      notes: {
-        plan: paymentData.planName,
-        company: formData.company,
-        address: 'India'
-      },
-      theme: {
-        color: '#9333ea',
-        backdrop_color: '#f4efff'
-      },
-      modal: {
-        ondismiss: function() {
-          setLoading(false)
-          console.log('Payment modal dismissed')
-        },
-        escape: true,
-        handleback: true,
-        confirm_close: true,
-        animation: 'slide'
-      }
-    }
-
     try {
-      const rzp = new window.Razorpay(options)
-      rzp.open()
-
-      rzp.on('payment.failed', function (response: any) {
-        console.error('Payment failed:', response)
-        alert(`Payment Failed: ${response.error.description}`)
-        setLoading(false)
+      const planId = localStorage.getItem('planId') || paymentData.planName
+      const orderResponse = await paymentAPI.createOrder({
+        planName: paymentData.planName,
+        planId: String(planId),
+        amount: paymentData.planPrice,
+        customerName: formData.name,
+        customerEmail: formData.email,
+        customerPhone: formData.phone,
+        notes: {
+          plan: paymentData.planName,
+          company: formData.company,
+        },
       })
-    } catch (error) {
-      console.error('Razorpay error:', error)
-      alert('Payment system error. Please try again.')
+
+      const orderData = orderResponse.data?.data
+      if (!orderData || !orderData.razorpayOrderId) {
+        throw new Error('Unable to create payment order. Please try again.')
+      }
+
+      const options = {
+        key: orderData.key,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: 'Resume Ready Stack',
+        description: `${paymentData.planName} - Professional Resume Service`,
+        image: '/resume-ready-stack-logo.svg',
+        order_id: orderData.razorpayOrderId,
+        handler: async function (response: any) {
+          try {
+            await paymentAPI.verifyPayment({
+              orderId: orderData.orderId,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature,
+              customerName: formData.name,
+              customerEmail: formData.email,
+              customerPhone: formData.phone,
+            })
+
+            setPaymentSuccess(true)
+            const paymentDetails = {
+              razorpay_payment_id: response.razorpay_payment_id,
+              ...paymentData,
+              ...formData,
+              paidAt: new Date().toISOString(),
+            }
+            localStorage.setItem('paymentSuccess', JSON.stringify(paymentDetails))
+
+            setTimeout(() => {
+              window.location.href = '/payment-success'
+            }, 2000)
+          } catch (verifyError: any) {
+            console.error('Verification failed:', verifyError)
+            const verifyMessage = verifyError?.response?.data?.message || 'Payment verification failed. Please contact support.'
+            setError(verifyMessage)
+            alert(verifyMessage)
+            setLoading(false)
+          }
+        },
+        prefill: {
+          name: formData.name,
+          email: formData.email,
+          contact: formData.phone,
+        },
+        notes: {
+          plan: paymentData.planName,
+          company: formData.company,
+        },
+        theme: {
+          color: '#9333ea',
+          backdrop_color: '#f4efff',
+        },
+        modal: {
+          ondismiss: function() {
+            setLoading(false)
+            console.log('Payment modal dismissed')
+          },
+          escape: true,
+          handleback: true,
+          confirm_close: true,
+          animation: 'slide',
+        },
+      }
+
+      try {
+        const rzp = new window.Razorpay(options)
+        rzp.open()
+        rzp.on('payment.failed', function (response: any) {
+          console.error('Payment failed:', response)
+          alert(`Payment Failed: ${response.error?.description || response.error?.reason || 'Please try again.'}`)
+          setLoading(false)
+        })
+      } catch (error) {
+        console.error('Razorpay error:', error)
+        alert('Payment system error. Please try again.')
+        setLoading(false)
+      }
+    } catch (err: any) {
+      console.error('Order creation error:', err)
+      setError(err?.response?.data?.message || err?.message || 'Unable to start payment. Please try again.')
       setLoading(false)
     }
   }
@@ -248,6 +291,12 @@ function PaymentGateway() {
             <span>Secure Payment</span>
           </div>
         </div>
+
+        {error && (
+          <div className="payment-error-banner">
+            <p>{error}</p>
+          </div>
+        )}
 
         <div className="payment-content">
           {/* Plan Summary */}

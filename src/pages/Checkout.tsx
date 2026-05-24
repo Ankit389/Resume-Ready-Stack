@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { CreditCard, Shield, User, Mail, Phone, Building, CheckCircle, ArrowLeft, AlertCircle } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { Badge } from '../components/ui/badge';
 import { useAuth } from '../context/AuthContext';
+import { paymentAPI } from '../lib/api';
 import { formatPrice } from '../lib/utils';
 
 declare global { interface Window { Razorpay: any; } }
@@ -16,15 +16,16 @@ export default function Checkout() {
   const { user } = useAuth();
 
   const params = new URLSearchParams(location.search);
-  const planName = params.get('plan') || localStorage.getItem('selectedPlan') || 'ATS Optimization';
-  const planPrice = parseInt(params.get('price') || localStorage.getItem('planPrice') || '1999');
-  const planId = params.get('id') || '';
+  const planName = params.get('plan') || localStorage.getItem('selectedPlan') || 'Test Payment';
+  const planPrice = parseInt(params.get('price') || localStorage.getItem('planPrice') || '2');
+  const planId = params.get('id') || '0';
 
   const [form, setForm] = useState({
     name: user?.name || '',
     email: user?.email || '',
     phone: user?.phone || '',
     company: '',
+    template: params.get('template') || '',
     agreed: false,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -70,45 +71,78 @@ export default function Checkout() {
       return;
     }
 
-    const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_placeholder',
-      amount: planPrice * 100,
-      currency: 'INR',
-      name: 'Purnima Career Studio',
-      description: `${planName} — Professional Career Service`,
-      image: '/resume-ready-stack-logo.svg',
-      handler: (response: any) => {
-        setPaymentId(response.razorpay_payment_id);
-        const details = { ...form, planName, planPrice, razorpay_payment_id: response.razorpay_payment_id, paidAt: new Date().toISOString() };
-        localStorage.setItem('paymentSuccess', JSON.stringify(details));
-        setSuccess(true);
-        setLoading(false);
-      },
-      prefill: { name: form.name, email: form.email, contact: form.phone },
-      notes: { plan: planName, company: form.company },
-      theme: { color: '#8b5cf6' },
-      modal: {
-        ondismiss: () => setLoading(false),
-        escape: true,
-        confirm_close: true,
-      },
-    };
-
     try {
+      const orderResponse = await paymentAPI.createOrder({
+        planName,
+        planId,
+        amount: planPrice,
+        customerName: form.name,
+        customerEmail: form.email,
+        customerPhone: form.phone,
+        notes: {
+          plan: planName,
+          company: form.company,
+          template: form.template,
+        },
+      });
+
+      const orderData = orderResponse.data?.data;
+      if (!orderData || !orderData.razorpayOrderId) {
+        throw new Error('Unable to create payment order.');
+      }
+
+      const options = {
+        key: orderData.key,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: 'Purnima Career Studio',
+        description: `${planName} — Professional Career Service`,
+        image: '/resume-ready-stack-logo.svg',
+        order_id: orderData.razorpayOrderId,
+        prefill: { name: form.name, email: form.email, contact: form.phone },
+        notes: { plan: planName, company: form.company },
+        theme: { color: '#8b5cf6' },
+        modal: {
+          ondismiss: () => setLoading(false),
+          escape: true,
+          confirm_close: true,
+        },
+        handler: async (response: any) => {
+          try {
+            await paymentAPI.verifyPayment({
+              orderId: orderData.orderId,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature,
+              customerName: form.name,
+              customerEmail: form.email,
+              customerPhone: form.phone,
+            });
+
+            setPaymentId(response.razorpay_payment_id);
+            setSuccess(true);
+          } catch (verifyError: any) {
+            setError(verifyError?.response?.data?.message || 'Payment verification failed.');
+          } finally {
+            setLoading(false);
+          }
+        },
+      };
+
       const rzp = new window.Razorpay(options);
       rzp.on('payment.failed', (r: any) => {
-        setError(`Payment failed: ${r.error.description}`);
+        setError(`Payment failed: ${r.error?.description || r.error?.reason || 'Please try again.'}`);
         setLoading(false);
       });
       rzp.open();
-    } catch {
-      setError('Payment system error. Please try again.');
+    } catch (err: any) {
+      setError(err?.response?.data?.message || err?.message || 'Unable to start payment. Please try again.');
       setLoading(false);
     }
   };
 
   if (success) return (
-    <div className="min-h-screen bg-[#060612] flex items-center justify-center pt-16 p-4">
+    <div className="flex items-center justify-center p-4 py-16">
       <div className="glass rounded-3xl p-10 max-w-md text-center">
         <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse-glow">
           <CheckCircle className="w-10 h-10 text-emerald-400" />
@@ -118,15 +152,19 @@ export default function Checkout() {
         {paymentId && <p className="text-xs text-slate-500 mb-6">Payment ID: {paymentId}</p>}
         <p className="text-slate-300 text-sm mb-8">We'll contact you within 24 hours to get started on your <strong className="text-purple-400">{planName}</strong>.</p>
         <div className="flex flex-col gap-3">
-          <Link to="/dashboard"><Button className="w-full" variant="glow">Go to Dashboard</Button></Link>
-          <Link to="/"><Button className="w-full" variant="secondary">Back to Home</Button></Link>
+          <Button asChild className="w-full" variant="glow">
+            <Link to="/dashboard">Go to Dashboard</Link>
+          </Button>
+          <Button asChild className="w-full" variant="secondary">
+            <Link to="/">Back to Home</Link>
+          </Button>
         </div>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-[#060612] pt-16">
+    <div className="py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Link to="/pricing" className="inline-flex items-center gap-2 text-slate-400 hover:text-purple-400 transition-colors mb-8 text-sm">
           <ArrowLeft className="w-4 h-4" /> Back to Pricing
@@ -182,6 +220,26 @@ export default function Checkout() {
                     <Input placeholder="Your company" className="pl-10"
                       value={form.company} onChange={e => setForm(p => ({ ...p, company: e.target.value }))} />
                   </div>
+                </div>
+
+                <div className="space-y-1.5 sm:col-span-2">
+                  <Label>Preferred Template</Label>
+                  <div className="relative">
+                    <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                    <select
+                      className="flex h-[44px] w-full rounded-xl border border-white/10 bg-[#1E293B] pl-10 pr-4 text-[15px] text-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#6C63FF]/60 transition-all hover:border-white/20 appearance-none cursor-pointer"
+                      value={form.template}
+                      onChange={e => setForm(p => ({ ...p, template: e.target.value }))}
+                      style={{ backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394A3B8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', backgroundSize: '16px' }}
+                    >
+                      <option value="">Let our experts decide</option>
+                      <option value="Classic Professional">Classic Professional</option>
+                      <option value="Modern Creative">Modern Creative</option>
+                      <option value="Prime ATS">Prime ATS</option>
+                      <option value="Executive Leader">Executive Leader</option>
+                    </select>
+                  </div>
+                  <p className="text-xs text-slate-500 mt-1">You can change your mind later when we contact you.</p>
                 </div>
               </div>
 

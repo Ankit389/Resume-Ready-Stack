@@ -26,15 +26,10 @@ export default function Footer() {
       <div className="container-page" style={{ paddingTop: 64, paddingBottom: 32 }}>
 
         {/* Top grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-          gap: 40,
-          marginBottom: 48,
-        }}>
+        <div className="footer-grid">
 
           {/* Brand */}
-          <div style={{ gridColumn: 'span 1' }}>
+          <div>
             <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 12, marginBottom: 16, textDecoration: 'none' }}>
               <div style={{
                 width: 40, height: 40, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -52,7 +47,7 @@ export default function Footer() {
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {[
-                { icon: Mail,   text: 'technicalpurnima123@oksbi.com', href: 'mailto:technicalpurnima123@oksbi.com' },
+                { icon: Mail,   text: 'resumereadystack@gmail.com', href: 'mailto:resumereadystack@gmail.com' },
                 { icon: Phone,  text: '+91 98765 43210',               href: 'tel:+919876543210' },
                 { icon: MapPin, text: 'India (Remote Services)',        href: null },
               ].map(({ icon: Icon, text, href }) => (

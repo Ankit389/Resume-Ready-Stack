@@ -38,20 +38,22 @@ export default function ServiceDetails() {
   const BOX = { background: '#1E293B', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px' };
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: '#0F172A' }}>
+    <div className="py-24 flex items-center justify-center">
       <div className="w-10 h-10 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#6C63FF', borderTopColor: 'transparent' }} />
     </div>
   );
 
   if (!service) return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: '#0F172A' }}>
+    <div className="py-24 flex flex-col items-center justify-center gap-4">
       <p className="text-lg" style={{ color: '#94A3B8' }}>Service not found</p>
-      <Link to="/services"><Button variant="outline"><ArrowLeft className="w-4 h-4" /> Back to Services</Button></Link>
+      <Button asChild variant="outline">
+        <Link to="/services"><ArrowLeft className="w-4 h-4 mr-2" /> Back to Services</Link>
+      </Button>
     </div>
   );
 
   return (
-    <div className="min-h-screen" style={{ background: '#0F172A' }}>
+    <div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Link
           to="/services"
@@ -135,12 +137,14 @@ export default function ServiceDetails() {
               </div>
 
               <div className="space-y-3">
-                <Link to={`/checkout?service=${service.id}&plan=${encodeURIComponent(service.name)}&price=${service.price}`} className="block">
-                  <Button className="w-full" size="lg" variant="glow">Get This Service <ArrowRight className="w-4 h-4" /></Button>
-                </Link>
-                <Link to="/contact" className="block">
-                  <Button className="w-full" size="lg" variant="secondary">Ask a Question</Button>
-                </Link>
+                <Button asChild className="w-full" size="lg" variant="glow">
+                  <Link to={`/checkout?service=${service.id}&plan=${encodeURIComponent(service.name)}&price=${service.price}`}>
+                    Get This Service <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+                <Button asChild className="w-full" size="lg" variant="secondary">
+                  <Link to="/contact">Ask a Question</Link>
+                </Button>
               </div>
 
               <div className="mt-5 pt-5 text-center" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>

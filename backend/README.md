@@ -17,57 +17,68 @@ A simple Node.js and Express backend API for the Resume Ready Stack website.
 ## 📡 API Endpoints
 
 ### Health Check
+
 - `GET /api/health` - Server health check
 
 ### Services
+
 - `GET /api/services` - Get all services
 - `GET /api/services/:id` - Get single service
 
 ### Plans
+
 - `GET /api/plans` - Get all pricing plans
 - `GET /api/plans/:id` - Get single plan
 
 ### Contact
+
 - `POST /api/contact` - Submit contact form
 - `GET /api/contact` - Get all contact messages (admin)
 
 ### Payments
+
 - `POST /api/payments/webhook` - Razorpay webhook handler
 
 ## 🛠️ Installation
 
 ### Prerequisites
+
 - Node.js 14.0.0 or higher
 - npm or yarn
 
 ### Steps
 
 1. **Clone the repository**
+
    ```bash
    cd backend
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Create environment file**
+
    ```bash
    copy .env.example .env
    ```
 
 4. **Configure environment variables** (optional for development)
+
    ```env
    PORT=5000
    NODE_ENV=development
    ```
 
 5. **Start the server**
+
    ```bash
    # Development with nodemon
    npm run dev
-   
+
    # Production
    npm start
    ```
@@ -75,11 +86,13 @@ A simple Node.js and Express backend API for the Resume Ready Stack website.
 ## 📝 API Usage Examples
 
 ### Get All Services
+
 ```bash
 curl http://localhost:5000/api/services
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -97,6 +110,7 @@ curl http://localhost:5000/api/services
 ```
 
 ### Submit Contact Form
+
 ```bash
 curl -X POST http://localhost:5000/api/contact \
   -H "Content-Type: application/json" \
@@ -110,6 +124,7 @@ curl -X POST http://localhost:5000/api/contact \
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -123,11 +138,13 @@ curl -X POST http://localhost:5000/api/contact \
 ```
 
 ### Get All Plans
+
 ```bash
 curl http://localhost:5000/api/plans
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -149,6 +166,7 @@ curl http://localhost:5000/api/plans
 ## 🔧 Development
 
 ### Project Structure
+
 ```
 backend/
 ├── server.js              # Main server file
@@ -159,19 +177,20 @@ backend/
 ```
 
 ### Scripts
+
 - `npm start` - Start server in production mode
 - `npm run dev` - Start server in development mode with nodemon
 - `npm test` - Run tests (placeholder)
 
 ### Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| PORT | Server port | 5000 |
-| NODE_ENV | Environment mode | development |
-| RAZORPAY_KEY_ID | Razorpay key ID | - |
-| RAZORPAY_KEY_SECRET | Razorpay key secret | - |
-| RAZORPAY_WEBHOOK_SECRET | Razorpay webhook secret | - |
+| Variable                | Description             | Default     |
+| ----------------------- | ----------------------- | ----------- |
+| PORT                    | Server port             | 5000        |
+| NODE_ENV                | Environment mode        | development |
+| RAZORPAY_KEY_ID         | Razorpay key ID         | -           |
+| RAZORPAY_KEY_SECRET     | Razorpay key secret     | -           |
+| RAZORPAY_WEBHOOK_SECRET | Razorpay webhook secret | -           |
 
 ## 🛡️ Security
 
@@ -194,6 +213,7 @@ All API endpoints return consistent error responses:
 ```
 
 ### Common Status Codes
+
 - `200` - Success
 - `201` - Created
 - `400` - Bad Request
@@ -205,12 +225,14 @@ All API endpoints return consistent error responses:
 ### Production Setup
 
 1. **Set environment variables**
+
    ```env
    NODE_ENV=production
    PORT=5000
    ```
 
 2. **Install production dependencies**
+
    ```bash
    npm install --production
    ```
@@ -223,6 +245,7 @@ All API endpoints return consistent error responses:
 ### Docker Deployment (Optional)
 
 Create a `Dockerfile`:
+
 ```dockerfile
 FROM node:16-alpine
 WORKDIR /app
@@ -244,9 +267,10 @@ CMD ["npm", "start"]
 ## 📞 Support
 
 For any issues or questions:
-- Email: technicalpurnima123@oksbi.com
-- Phone: +91 98765 43210
-- WhatsApp: +91 98765 43210
+
+- Email: resumereadystack@gmail.com
+- Phone: +91 92000000
+- WhatsApp: +91 974392922
 
 ## 📄 License
 

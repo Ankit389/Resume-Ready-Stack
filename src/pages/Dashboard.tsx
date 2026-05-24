@@ -72,10 +72,10 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#060612] pt-16">
+    <div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
-        <div className="flex items-center justify-between mb-10">
+        <div className="dashboard-header mb-10">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-purple-500/30">
               {user?.name.charAt(0).toUpperCase()}

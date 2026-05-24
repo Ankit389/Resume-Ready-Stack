@@ -6,7 +6,7 @@ import { Label } from '../components/ui/label';
 import { contactAPI } from '../lib/api';
 
 const contactInfo = [
-  { icon: Mail,   label: 'Email',           value: 'technicalpurnima123@oksbi.com', href: 'mailto:technicalpurnima123@oksbi.com' },
+  { icon: Mail,   label: 'Email',           value: 'resumereadystack@gmail.com', href: 'mailto:resumereadystack@gmail.com' },
   { icon: Phone,  label: 'WhatsApp / Call', value: '+91 98765 43210',               href: 'tel:+919876543210' },
   { icon: MapPin, label: 'Location',        value: 'India (Remote Services Worldwide)', href: null },
   { icon: Clock,  label: 'Working Hours',   value: 'Mon–Sat: 9AM – 7PM IST',       href: null },
@@ -53,7 +53,7 @@ export default function Contact() {
   };
 
   return (
-    <div style={{ background: '#0F172A', minHeight: '100vh' }}>
+    <div>
 
       {/* Hero */}
       <section style={{ position: 'relative', paddingTop: 72, paddingBottom: 48, overflow: 'hidden' }}>
@@ -72,7 +72,7 @@ export default function Contact() {
       {/* Content */}
       <section style={{ paddingBottom: 96 }}>
         <div className="container-page">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 28 }}>
+          <div className="contact-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 28 }}>
 
             {/* Left Sidebar */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
@@ -161,9 +161,9 @@ export default function Contact() {
                   )}
 
                   <form onSubmit={handleSubmit}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 16 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 24, marginBottom: 24 }}>
                       <div>
-                        <Label style={{ display: 'block', marginBottom: 6 }}>Full Name *</Label>
+                        <Label style={{ display: 'block', marginBottom: 10, fontSize: '0.9rem', fontWeight: 500, color: '#E2E8F0' }}>Full Name *</Label>
                         <Input
                           placeholder="Your name"
                           value={form.name}
@@ -173,7 +173,7 @@ export default function Contact() {
                         {errors.name && <p style={{ fontSize: '0.78rem', color: '#f87171', marginTop: 4 }}>{errors.name}</p>}
                       </div>
                       <div>
-                        <Label style={{ display: 'block', marginBottom: 6 }}>Email Address *</Label>
+                        <Label style={{ display: 'block', marginBottom: 10, fontSize: '0.9rem', fontWeight: 500, color: '#E2E8F0' }}>Email Address *</Label>
                         <Input
                           type="email" placeholder="you@email.com"
                           value={form.email}
@@ -183,7 +183,7 @@ export default function Contact() {
                         {errors.email && <p style={{ fontSize: '0.78rem', color: '#f87171', marginTop: 4 }}>{errors.email}</p>}
                       </div>
                       <div>
-                        <Label style={{ display: 'block', marginBottom: 6 }}>Phone <span style={{ color: '#64748B' }}>(Optional)</span></Label>
+                        <Label style={{ display: 'block', marginBottom: 10, fontSize: '0.9rem', fontWeight: 500, color: '#E2E8F0' }}>Phone <span style={{ color: '#64748B', fontWeight: 400 }}>(Optional)</span></Label>
                         <Input type="tel" placeholder="+91 98765 43210" value={form.phone} onChange={e => setForm(p => ({ ...p, phone: e.target.value }))} />
                       </div>
                       <div>
@@ -192,9 +192,9 @@ export default function Contact() {
                           value={form.service}
                           onChange={e => setForm(p => ({ ...p, service: e.target.value }))}
                           style={{
-                            width: '100%', height: 44, padding: '0 14px', borderRadius: 12,
+                            width: '100%', height: 52, padding: '0 16px', borderRadius: 12,
                             background: '#1E293B', border: '1px solid rgba(255,255,255,0.1)',
-                            color: form.service ? '#E2E8F0' : '#64748B', fontSize: '0.875rem',
+                            color: form.service ? '#E2E8F0' : '#64748B', fontSize: '15px',
                           }}
                         >
                           <option value="" style={{ background: '#1E293B', color: '#64748B' }}>Select a service...</option>
@@ -203,22 +203,22 @@ export default function Contact() {
                       </div>
                     </div>
 
-                    <div style={{ marginBottom: 20 }}>
-                      <Label style={{ display: 'block', marginBottom: 6 }}>Message *</Label>
+                    <div style={{ marginBottom: 24 }}>
+                      <Label style={{ display: 'block', marginBottom: 10, fontSize: '0.9rem', fontWeight: 500, color: '#E2E8F0' }}>Message *</Label>
                       <textarea
                         rows={5} placeholder="Tell us about yourself and what you're looking for..."
                         value={form.message}
                         onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
                         style={{
-                          width: '100%', padding: '12px 14px', borderRadius: 12, resize: 'vertical',
-                          background: '#1E293B', fontSize: '0.875rem', color: '#E2E8F0', lineHeight: 1.6,
+                          width: '100%', padding: '16px', borderRadius: 12, resize: 'vertical',
+                          background: '#1E293B', fontSize: '15px', color: '#E2E8F0', lineHeight: 1.6,
                           border: errors.message ? '1px solid rgba(239,68,68,0.6)' : '1px solid rgba(255,255,255,0.1)',
                         }}
                       />
                       {errors.message && <p style={{ fontSize: '0.78rem', color: '#f87171', marginTop: 4 }}>{errors.message}</p>}
                     </div>
 
-                    <Button type="submit" size="lg" className="w-full" variant="glow" disabled={loading}>
+                    <Button type="submit" size="xl" className="w-full" variant="glow" disabled={loading} style={{ marginTop: 16 }}>
                       {loading
                         ? <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                             <div style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />

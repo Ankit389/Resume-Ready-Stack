@@ -38,7 +38,7 @@ function PaymentSuccess() {
   }
 
   const handleEmail = () => {
-    window.open('mailto:technicalpurnima123@oksbi.com?subject=Payment Confirmation - Resume Ready Stack', '_blank')
+    window.open('mailto:resumereadystack@gmail.com?subject=Payment Confirmation - Resume Ready Stack', '_blank')
   }
 
   return (

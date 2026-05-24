@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, FileText, LogOut, ChevronDown, LayoutDashboard, Sparkles } from 'lucide-react';
+import { Menu, X, LogOut, ChevronDown, LayoutDashboard, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const navLinks = [
@@ -44,12 +44,11 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-400"
+        className="fixed top-4 left-4 right-4 z-50 rounded-[2rem] border border-white/10 bg-slate-950/70 backdrop-blur-2xl shadow-2xl transition-all duration-400 sm:left-6 sm:right-6 lg:left-8 lg:right-8"
         style={{
-          background: scrolled ? 'rgba(15,23,42,0.85)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(20px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(255,255,255,0.07)' : '1px solid transparent',
-          boxShadow: scrolled ? '0 4px 32px rgba(0,0,0,0.3)' : 'none',
+          background: scrolled ? 'rgba(15,23,42,0.92)' : 'rgba(15,23,42,0.65)',
+          borderColor: scrolled ? 'rgba(255,255,255,0.14)' : 'rgba(255,255,255,0.08)',
+          boxShadow: scrolled ? '0 28px 80px rgba(15,23,42,0.35)' : '0 24px 60px rgba(15,23,42,0.18)',
         }}
       >
         {/* top gradient accent line */}
@@ -61,46 +60,46 @@ export default function Navbar() {
           }}
         />
 
-        <div className="container-page">
-          <div className="flex items-center justify-between h-16 lg:h-[68px]">
+        <div className="w-full px-5 sm:px-8 lg:px-10">
+          <div className="flex items-center justify-between h-14">
 
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group shrink-0">
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-all duration-300"
-                style={{ background: 'linear-gradient(135deg, #6C63FF, #00C9A7)', boxShadow: '0 0 20px rgba(108,99,255,0.35)' }}
-              >
-                <FileText className="w-[18px] h-[18px] text-white" strokeWidth={2.5} />
+              <div className="relative flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+                <div 
+                  className="absolute inset-0 rounded-full blur-md opacity-50 group-hover:opacity-80 transition-opacity duration-300"
+                  style={{ background: 'linear-gradient(135deg, #6C63FF, #00C9A7)' }}
+                />
+                <img
+                  src="/resume-ready-logo.png"
+                  alt="Resume Ready Logo"
+                  className="relative w-11 h-11 rounded-full object-contain"
+                  style={{ boxShadow: '0 0 15px rgba(0,0,0,0.5)' }}
+                />
               </div>
-              <div className="flex flex-col leading-none">
-                <span className="font-extrabold text-white text-[15px] tracking-tight">Resume Ready</span>
-                <span
-                  className="text-[10px] font-bold tracking-[0.18em] uppercase"
-                  style={{ background: 'linear-gradient(to right, #6C63FF, #00C9A7)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
-                >
+              <div className="flex flex-col">
+                <span className="font-black text-white text-[17px] leading-none tracking-tight mb-0.5">Resume Ready</span>
+                <span className="text-[10px] font-bold tracking-widest uppercase leading-none" style={{ color: '#00C9A7' }}>
                   Stack
                 </span>
               </div>
             </Link>
 
             {/* Desktop nav */}
-            <div className="hidden md:flex items-center gap-0.5">
+            <div className="hidden md:flex items-center gap-4">
               {navLinks.map(({ label, path }) => (
                 <Link
                   key={path}
                   to={path}
-                  className="relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 group"
-                  style={{ color: isActive(path) ? '#E2E8F0' : '#94A3B8' }}
+                  className="relative rounded-xl px-4 py-2 text-sm font-medium transition-colors duration-200 group hover:text-white"
+                  style={{ color: isActive(path) ? '#F8FAFC' : '#94A3B8' }}
                 >
                   <span
-                    className="absolute inset-0 rounded-lg transition-all duration-200"
-                    style={{ background: isActive(path) ? 'rgba(108,99,255,0.12)' : 'transparent' }}
-                  />
-                  <span
-                    className="absolute bottom-1 left-1/2 -translate-x-1/2 h-0.5 rounded-full transition-all duration-300"
+                    className="absolute bottom-1 left-1/2 h-0.5 rounded-full transition-all duration-300"
                     style={{
                       background: 'linear-gradient(to right, #6C63FF, #00C9A7)',
                       width: isActive(path) ? '18px' : '0px',
+                      transform: 'translateX(-50%)'
                     }}
                   />
                   <span className="relative">{label}</span>
@@ -109,7 +108,7 @@ export default function Navbar() {
             </div>
 
             {/* Desktop auth */}
-            <div className="hidden md:flex items-center gap-2.5">
+            <div className="hidden md:flex items-center gap-4">
               {isAuthenticated ? (
                 <div className="relative" ref={menuRef}>
                   <button
@@ -255,9 +254,6 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
-
-      {/* Spacer */}
-      <div className="h-16 lg:h-[68px]" />
     </>
   );
 }

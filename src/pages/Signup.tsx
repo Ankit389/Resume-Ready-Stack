@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, Mail, Lock, Phone, Eye, EyeOff, FileText, ArrowRight, AlertCircle, CheckCircle } from 'lucide-react';
+import { User, Mail, Lock, Phone, Eye, EyeOff, FileText, ArrowRight, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -49,8 +49,10 @@ export default function Signup() {
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4 py-12 relative overflow-hidden"
-      style={{ background: '#0F172A' }}
     >
+      <Link to="/" className="absolute top-6 left-6 flex items-center gap-2 text-sm font-medium z-20 transition-colors" style={{ color: '#94A3B8' }} onMouseEnter={e => (e.currentTarget.style.color = '#fff')} onMouseLeave={e => (e.currentTarget.style.color = '#94A3B8')}>
+        <ArrowLeft className="w-4 h-4" /> Back to Home
+      </Link>
       <div className="absolute inset-0 grid-bg" style={{ opacity: 0.35 }} />
       <div className="glow-orb w-80 h-80 bg-[#6C63FF] top-20 right-1/4" style={{ opacity: 0.09 }} />
 

@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Star, CheckCircle, Users, Award, TrendingUp, Briefcase, FileText, Globe, MessageSquare, ChevronDown, Zap } from 'lucide-react';
+import { ArrowRight, Star, CheckCircle, Users, Award, TrendingUp, Briefcase, FileText, Globe, MessageSquare, Zap } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Card, CardContent } from '../components/ui/card';
@@ -18,6 +18,39 @@ const services = [
   { icon: MessageSquare, title: 'Cover Letter Writing',  desc: 'Compelling cover letters tailored to each job opportunity.',                      accent: '#f97316' },
   { icon: Briefcase,     title: 'Career Coaching',       desc: 'End-to-end support from job search strategy to offer negotiation.',               accent: '#ec4899' },
 ];
+
+const templates = [
+  {
+    id: 1,
+    name: 'Classic Professional',
+    desc: 'Classically structured resume template for a robust career history.',
+    category: 'Simple',
+    image: '/images/templates/professional.png',
+  },
+  {
+    id: 2,
+    name: 'Modern Creative',
+    desc: 'Contemporary design with bold typography and clear hierarchy.',
+    category: 'Modern',
+    image: '/images/templates/modern.png',
+  },
+  {
+    id: 3,
+    name: 'Prime ATS',
+    desc: 'Professional, streamlined resume template optimized for maximum ATS compatibility.',
+    category: 'ATS',
+    image: '/images/templates/ats.png',
+  },
+  {
+    id: 4,
+    name: 'Executive Leader',
+    desc: 'Premium layout for senior roles focusing on impact and leadership.',
+    category: 'Executive',
+    image: '/images/templates/executive.png',
+  },
+];
+
+const templateCategories = ['All templates', 'Simple', 'Modern', 'ATS', 'Executive'];
 
 const testimonials = [
   { name: 'Rahul Sharma', role: 'Software Engineer @ Google',  text: 'Got 3 interview calls within a week of updating my resume. Absolutely worth it!',     rating: 5 },
@@ -41,164 +74,194 @@ const whyStats = [
 ];
 
 export default function Home() {
-  const [visible, setVisible] = useState(false);
-  useEffect(() => { const t = setTimeout(() => setVisible(true), 60); return () => clearTimeout(t); }, []);
+  const [activeCategory, setActiveCategory] = useState('All templates');
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  
+  useEffect(() => { const t = setTimeout(() => {}, 60); return () => clearTimeout(t); }, []);
+  
+  const filteredTemplates = activeCategory === 'All templates' 
+    ? templates 
+    : templates.filter(t => t.category === activeCategory);
 
   return (
-    <div style={{ background: '#0F172A', minHeight: '100vh' }}>
-
-      {/* ── Hero ── */}
-      <section style={{ position: 'relative', minHeight: '92vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
-        <div className="absolute inset-0 grid-bg" />
-        <div className="glow-orb" style={{ width: 480, height: 480, background: '#6C63FF', top: 40, left: '20%', opacity: 0.09 }} />
-        <div className="glow-orb" style={{ width: 320, height: 320, background: '#00C9A7', bottom: 60, right: '20%', opacity: 0.07 }} />
-
+    <div>
+      {/* Hero */}
+      <section className="relative overflow-hidden" style={{ paddingTop: 40, paddingBottom: 60 }}>
         <div
-          className="container-page"
+          className="absolute inset-0 pointer-events-none"
           style={{
-            position: 'relative', zIndex: 10, textAlign: 'center',
-            transition: 'opacity 0.7s ease, transform 0.7s ease',
-            opacity: visible ? 1 : 0,
-            transform: visible ? 'translateY(0)' : 'translateY(24px)',
-            paddingTop: 40, paddingBottom: 40,
+            backgroundImage:
+              'radial-gradient(circle at top, rgba(108,99,255,0.16), transparent 25%), radial-gradient(circle at bottom right, rgba(0,201,167,0.12), transparent 30%)',
           }}
-        >
-          <div className="section-tag" style={{ marginBottom: 20, display: 'inline-flex' }}>
-            <Star style={{ width: 11, height: 11 }} />
-            #1 Career Profile Specialist in India
+        />
+        <div className="container-page relative">
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="section-tag mb-5 inline-flex justify-center">
+              <Star className="w-3.5 h-3.5" />
+              #1 Career Profile Specialist in India
+            </div>
+            <h1 className="heading-xl mb-6">
+              Land Your <span className="gradient-text">Dream Job</span>
+              <br />with an ATS-Ready Resume
+            </h1>
+            <p className="body-lg max-w-2xl mx-auto text-slate-300 mb-10">
+              Professional resume writing, LinkedIn optimization, and career coaching designed to get you shortlisted faster.
+              500+ professionals placed in top companies.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+              <Button asChild size="lg" variant="glow" className="w-full sm:w-auto">
+                <Link to="/pricing">Get Started Today <ArrowRight className="w-5 h-5 ml-1" /></Link>
+              </Button>
+              <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
+                <Link to="/services">Explore Services</Link>
+              </Button>
+            </div>
           </div>
 
-          <h1 className="heading-xl" style={{ marginBottom: 20 }}>
-            Land Your{' '}
-            <span className="gradient-text">Dream Job</span>
-            <br />with an ATS-Ready Resume
-          </h1>
-
-          <p className="body-lg" style={{ maxWidth: 560, margin: '0 auto 36px' }}>
-            Professional resume writing, LinkedIn optimization & career coaching that gets you shortlisted.
-            500+ professionals placed in top companies.
-          </p>
-
-          <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 60 }}>
-            <Link to="/pricing">
-              <Button size="lg" variant="glow">Get Started Today <ArrowRight style={{ width: 18, height: 18 }} /></Button>
-            </Link>
-            <Link to="/services">
-              <Button size="lg" variant="secondary">Explore Services</Button>
-            </Link>
-          </div>
-
-          {/* Stats */}
-          <div className="stats-grid" style={{ maxWidth: 640, margin: '0 auto' }}>
+          <div className="mt-16 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {stats.map(({ icon: Icon, value, label }) => (
-              <div
-                key={label}
-                className="glass"
-                style={{ padding: '20px 16px', textAlign: 'center', borderRadius: 16 }}
-              >
-                <Icon style={{ width: 20, height: 20, color: '#6C63FF', margin: '0 auto 8px' }} />
-                <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#fff' }}>{value}</div>
-                <div style={{ fontSize: '0.78rem', color: '#64748B', marginTop: 2 }}>{label}</div>
+              <div key={label} className="glass rounded-3xl border border-white/10 bg-slate-900/80 p-6 text-center shadow-[0_20px_50px_-35px_rgba(15,23,42,0.8)] transition-all duration-300 hover:-translate-y-1 hover:shadow-purple-500/20">
+                <div className="flex items-center justify-center mx-auto mb-4 h-12 w-12 rounded-2xl bg-slate-800 text-purple-300">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div className="text-2xl font-extrabold text-white">{value}</div>
+                <div className="mt-2 text-sm text-slate-400">{label}</div>
               </div>
             ))}
           </div>
         </div>
-
-        <div style={{ position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)', animation: 'float 2s ease-in-out infinite' }}>
-          <ChevronDown style={{ width: 24, height: 24, color: '#64748B' }} />
-        </div>
       </section>
 
-      {/* ── Services ── */}
-      <section className="section">
+      {/* Services */}
+      <section className="section" style={{ background: 'rgba(15,23,42,0.5)' }}>
         <div className="container-page">
-          <div style={{ textAlign: 'center', marginBottom: 52 }}>
-            <div className="section-tag" style={{ marginBottom: 14, display: 'inline-flex' }}>Our Services</div>
-            <h2 className="heading-lg" style={{ marginBottom: 12 }}>
-              Everything You Need to <span className="gradient-text">Get Hired</span>
+          <div className="max-w-2xl mx-auto text-center mb-14">
+            <div className="section-tag mb-4 inline-flex">Our Services</div>
+            <h2 className="heading-lg mb-4 max-w-xl mx-auto">
+              Everything You Need to <span className="gradient-text whitespace-nowrap">Get Hired</span>
             </h2>
-            <p className="body-lg" style={{ maxWidth: 460, margin: '0 auto' }}>
-              From resume to interview — we've got your career covered.
+            <p className="body-lg text-slate-400">
+              From resume to interview — we provide a polished career package that helps you stand out.
             </p>
           </div>
 
-          <div className="services-grid" style={{ marginBottom: 36 }}>
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {services.map(({ icon: Icon, title, desc, accent }) => (
-              <div
-                key={title}
-                className="glass"
-                style={{
-                  padding: '24px', borderRadius: 16, cursor: 'pointer',
-                  transition: 'transform 0.25s ease, border-color 0.25s ease',
-                }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.transform = 'translateY(-6px)';
-                  (e.currentTarget as HTMLElement).style.borderColor = 'rgba(108,99,255,0.35)';
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
-                  (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)';
-                }}
-              >
-                <div style={{
-                  width: 48, height: 48, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  marginBottom: 18, background: `linear-gradient(135deg, ${accent}33, ${accent}55)`,
-                  border: `1px solid ${accent}44`,
-                }}>
-                  <Icon style={{ width: 24, height: 24, color: accent }} />
+              <div key={title} className="group rounded-3xl border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.9)] transition duration-300 hover:-translate-y-1 hover:border-purple-400/30 hover:shadow-purple-500/20">
+                <div style={{ width: '56px', height: '56px', marginBottom: '24px' }} className="flex items-center justify-center rounded-2xl bg-slate-900/90 text-white shadow-lg">
+                  <Icon className="h-6 w-6" style={{ color: accent }} />
                 </div>
-                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#fff', marginBottom: 8 }}>{title}</h3>
-                <p style={{ fontSize: '0.875rem', color: '#94A3B8', lineHeight: 1.6 }}>{desc}</p>
+                <h3 className="mb-3 text-lg font-semibold text-white">{title}</h3>
+                <p className="text-sm leading-7 text-slate-400">{desc}</p>
               </div>
             ))}
           </div>
 
-          <div style={{ textAlign: 'center' }}>
-            <Link to="/services">
-              <Button variant="outline">View All Services <ArrowRight style={{ width: 16, height: 16 }} /></Button>
-            </Link>
+          <div className="mt-12 text-center">
+            <Button asChild variant="outline">
+              <Link to="/services">View All Services <ArrowRight className="w-4 h-4 ml-1" /></Link>
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* ── Why Us ── */}
-      <section className="section" style={{ position: 'relative', overflow: 'hidden' }}>
-        <div className="glow-orb" style={{ width: 280, height: 280, background: '#6C63FF', top: 0, right: 0, opacity: 0.07 }} />
+      {/* Templates */}
+      <section className="section bg-slate-950/50" id="templates">
         <div className="container-page">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 56, alignItems: 'center' }}>
+          <div className="max-w-3xl mx-auto text-center mb-10">
+            <h2 className="heading-lg mb-4">
+              ATS <span className="gradient-text">resume templates</span>
+            </h2>
+            <p className="body-lg text-slate-400">
+              Enhance your job search with our ATS resume templates. Impress human and robot recruiters with an effective design. Beat the algorithm, and showcase attention to detail.
+            </p>
+          </div>
+
+          {/* Filters */}
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
+            {templateCategories.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+                  activeCategory === cat
+                    ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/25 border-transparent'
+                    : 'bg-slate-900/50 text-slate-400 border border-white/5 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Template Grid */}
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {filteredTemplates.map(({ id, name, desc, image }) => (
+              <div key={id} className="group relative">
+                {/* Image Card */}
+                <div className="relative rounded-2xl overflow-hidden bg-white aspect-[1/1.414] shadow-lg mb-4 border border-white/5 transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-purple-500/20">
+                  <img src={image} alt={name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  
+                  {/* Hover Overlay */}
+                  <div className="absolute inset-0 bg-slate-900/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 px-6">
+                    <Button asChild size="lg" variant="glow" className="w-full">
+                      <Link to="/pricing">Create my resume</Link>
+                    </Button>
+                    <Button size="lg" variant="outline" className="w-full bg-slate-900/80 hover:bg-slate-800 text-white border-white/20" onClick={() => setPreviewImage(image)}>
+                      Preview template
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <h3 className="text-lg font-bold text-white mb-1">{name}</h3>
+                <p className="text-sm text-slate-400 leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-14 text-center">
+            <p className="text-slate-400 mb-6">Not sure which template suits you? Let our experts guide you.</p>
+            <Button asChild variant="secondary" className="inline-flex">
+              <Link to="/contact">Get Free Template Consultation</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us */}
+      <section className="section">
+        <div className="container-page">
+          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
             <div>
-              <div className="section-tag" style={{ marginBottom: 14 }}>Why Choose Us</div>
-              <h2 className="heading-lg" style={{ marginBottom: 16 }}>
+              <div className="section-tag mb-4 inline-flex">Why Choose Us</div>
+              <h2 className="heading-lg mb-5">
                 The <span className="gradient-text">Results</span> Speak for Themselves
               </h2>
-              <p className="body-lg" style={{ marginBottom: 28 }}>
-                We don't just write resumes — we craft career narratives that resonate with ATS systems and human recruiters alike.
+              <p className="body-lg text-slate-400 mb-8 max-w-xl">
+                We craft compelling career narratives that both ATS systems and hiring managers respond to — so you get more interviews and offers.
               </p>
-              <ul style={{ listStyle: 'none', marginBottom: 32 }}>
+              <div className="grid gap-4 sm:grid-cols-2">
                 {reasons.map(item => (
-                  <li key={item} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
-                    <CheckCircle style={{ width: 18, height: 18, color: '#00C9A7', flexShrink: 0 }} />
-                    <span style={{ fontSize: '0.9rem', color: '#E2E8F0' }}>{item}</span>
-                  </li>
+                  <div key={item} className="flex items-start gap-3 rounded-3xl border border-white/10 bg-slate-950/80 p-5">
+                    <CheckCircle className="mt-1 h-5 w-5 text-teal-400 flex-shrink-0" />
+                    <p className="text-sm text-slate-300 leading-6">{item}</p>
+                  </div>
                 ))}
-              </ul>
-              <Link to="/about">
-                <Button variant="outline">Learn More About Us <ArrowRight style={{ width: 16, height: 16 }} /></Button>
-              </Link>
+              </div>
+              <div className="mt-8">
+                <Button asChild variant="outline">
+                  <Link to="/about">Learn More About Us <ArrowRight className="w-4 h-4 ml-1" /></Link>
+                </Button>
+              </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <div className="grid gap-4 sm:grid-cols-2">
               {whyStats.map(({ value, label, sub }) => (
-                <div
-                  key={label}
-                  className="glass"
-                  style={{ padding: '24px 20px', textAlign: 'center', borderRadius: 16, transition: 'transform 0.25s' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
-                >
-                  <div className="gradient-text" style={{ fontSize: '2rem', fontWeight: 900, marginBottom: 4 }}>{value}</div>
-                  <div style={{ color: '#fff', fontWeight: 600, fontSize: '0.9rem' }}>{label}</div>
-                  <div style={{ color: '#64748B', fontSize: '0.78rem', marginTop: 4 }}>{sub}</div>
+                <div key={label} className="rounded-3xl border border-white/10 bg-slate-950/80 p-7 text-center shadow-[0_18px_50px_-35px_rgba(15,23,42,0.9)] transition duration-300 hover:-translate-y-1 hover:border-teal-400/30">
+                  <div className="gradient-text text-3xl font-bold">{value}</div>
+                  <div className="mt-3 text-sm font-semibold text-white">{label}</div>
+                  <div className="mt-1 text-xs text-slate-400">{sub}</div>
                 </div>
               ))}
             </div>
@@ -206,34 +269,30 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Testimonials ── */}
-      <section className="section">
+      {/* Testimonials */}
+      <section className="section" style={{ background: 'rgba(15,23,42,0.5)' }}>
         <div className="container-page">
-          <div style={{ textAlign: 'center', marginBottom: 52 }}>
-            <div className="section-tag" style={{ marginBottom: 14, display: 'inline-flex' }}>Testimonials</div>
+          <div className="text-center mb-14">
+            <div className="section-tag mb-4 inline-flex">Testimonials</div>
             <h2 className="heading-lg">What Clients <span className="gradient-text">Say</span></h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {testimonials.map(({ name, role, text, rating }) => (
-              <Card key={name}>
-                <CardContent style={{ padding: 24 }}>
-                  <div style={{ display: 'flex', gap: 4, marginBottom: 16 }}>
+              <Card key={name} className="rounded-3xl border border-white/10 bg-slate-950/90 shadow-[0_20px_50px_-35px_rgba(15,23,42,0.8)] transition hover:-translate-y-1 hover:shadow-purple-500/20">
+                <CardContent className="p-6">
+                  <div className="mb-5 flex gap-1">
                     {Array.from({ length: rating }).map((_, i) => (
-                      <Star key={i} style={{ width: 15, height: 15, fill: '#fbbf24', color: '#fbbf24' }} />
+                      <Star key={i} className="h-4 w-4 text-amber-300" />
                     ))}
                   </div>
-                  <p style={{ fontSize: '0.875rem', color: '#94A3B8', lineHeight: 1.7, marginBottom: 20 }}>"{text}"</p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{
-                      width: 40, height: 40, borderRadius: '50%', display: 'flex', alignItems: 'center',
-                      justifyContent: 'center', fontSize: '0.9rem', fontWeight: 700, color: '#fff', flexShrink: 0,
-                      background: 'linear-gradient(135deg, #6C63FF, #00C9A7)',
-                    }}>
+                  <p className="mb-6 text-sm leading-7 text-slate-300">"{text}"</p>
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-full text-sm font-semibold text-white" style={{ background: 'linear-gradient(135deg, #6C63FF, #00C9A7)' }}>
                       {name.charAt(0)}
                     </div>
                     <div>
-                      <div style={{ color: '#fff', fontWeight: 600, fontSize: '0.875rem' }}>{name}</div>
-                      <div style={{ color: '#64748B', fontSize: '0.78rem' }}>{role}</div>
+                      <div className="text-sm font-semibold text-white">{name}</div>
+                      <div className="text-xs text-slate-400">{role}</div>
                     </div>
                   </div>
                 </CardContent>
@@ -243,37 +302,69 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── CTA ── */}
+      {/* CTA */}
       <section className="section">
         <div className="container-narrow">
-          <div
-            style={{
-              background: '#1E293B', borderRadius: 24, padding: '60px 40px',
-              textAlign: 'center', position: 'relative', overflow: 'hidden',
-              border: '1.5px solid rgba(108,99,255,0.3)',
-            }}
-          >
-            <div className="glow-orb" style={{ width: 280, height: 280, background: '#6C63FF', top: -80, left: '50%', transform: 'translateX(-50%)', opacity: 0.14 }} />
-            <div style={{ position: 'relative', zIndex: 10 }}>
-              <Badge variant="glow" style={{ marginBottom: 20 }}>
-                <Zap style={{ width: 12, height: 12 }} /> Limited Slots Available
+          <div className="relative overflow-hidden rounded-3xl border border-purple-400/20 bg-slate-950/90 p-10 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.9)]">
+            <div className="absolute -top-16 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-purple-500/10 blur-3xl" />
+            <div className="relative z-10 text-center">
+              <Badge variant="glow" className="mx-auto mb-5 inline-flex">
+                <Zap className="h-3.5 w-3.5" /> Limited Slots Available
               </Badge>
-              <h2 className="heading-lg" style={{ marginBottom: 14 }}>Ready to Transform Your Career?</h2>
-              <p className="body-lg" style={{ maxWidth: 460, margin: '0 auto 32px' }}>
+              <h2 className="heading-lg mb-4">Ready to Transform Your Career?</h2>
+              <p className="body-lg mx-auto mb-8 max-w-xl text-slate-400">
                 Book your free resume audit today and take the first step toward your dream job.
               </p>
-              <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
-                <Link to="/pricing">
-                  <Button size="lg" variant="glow">Get Started <ArrowRight style={{ width: 16, height: 16 }} /></Button>
-                </Link>
-                <Link to="/contact">
-                  <Button size="lg" variant="secondary">Book Free Consultation</Button>
-                </Link>
+              <div className="flex flex-col items-center justify-center gap-4 sm:flex-row mt-6">
+                <Button asChild size="lg" variant="glow" className="w-full sm:w-auto">
+                  <Link to="/pricing">Get Started <ArrowRight className="w-4 h-4 ml-1" /></Link>
+                </Button>
+                <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
+                  <Link to="/contact">Book Free Consultation</Link>
+                </Button>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Template Preview Modal */}
+      {previewImage && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/90 backdrop-blur-md p-4 sm:p-8" onClick={() => setPreviewImage(null)}>
+          <div 
+            className="relative w-full max-w-5xl max-h-full flex flex-col bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-white/10"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-slate-900">
+              <h3 className="text-lg font-bold text-white">Template Preview</h3>
+              <button 
+                onClick={() => setPreviewImage(null)} 
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/15 text-slate-300 transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+            
+            {/* Body */}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-8 bg-slate-950 flex justify-center">
+              <img src={previewImage} alt="Template Preview" className="max-w-full h-auto rounded-xl shadow-[0_0_50px_rgba(108,99,255,0.15)]" />
+            </div>
+            
+            {/* Footer */}
+            <div className="p-5 border-t border-white/5 bg-slate-900 flex justify-end gap-4">
+              <Button variant="outline" onClick={() => setPreviewImage(null)} className="hidden sm:inline-flex border-white/10 hover:bg-white/5">
+                Close Preview
+              </Button>
+              <Button asChild size="lg" variant="glow" className="px-8 shadow-purple-500/25">
+                <Link to={`/pricing?template=${encodeURIComponent(templates.find(t => t.image === previewImage)?.name || '')}`}>
+                  Select This Template
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

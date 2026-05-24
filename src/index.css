@@ -1,34 +1,41 @@
 @import "tailwindcss";
 
-/* ─── Reset ─────────────────────────────────────────────── */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 /* ─── Design Tokens ──────────────────────────────────────── */
 :root {
-  --primary:        #6C63FF;
-  --primary-dark:   #5a52e0;
-  --primary-glow:   rgba(108, 99, 255, 0.35);
-  --secondary:      #00C9A7;
-  --secondary-glow: rgba(0, 201, 167, 0.3);
+  /* Primary Colors */
+  --primary:        #2563EB;
+  --primary-dark:   #1D4ED8;
+  --primary-glow:   rgba(37, 99, 235, 0.35);
+  --secondary:      #06B6D4;
+  --secondary-glow: rgba(6, 182, 212, 0.3);
 
-  --bg:         #0F172A;
-  --bg-card:    #1E293B;
-  --bg-hover:   #263348;
-  --border:     rgba(255, 255, 255, 0.08);
-  --border-md:  rgba(255, 255, 255, 0.12);
+  /* Background — Light Blue Theme */
+  --bg:         #BDDDFC;
+  --bg-card:    #88BDF2;
+  --bg-hover:   #6A89A7;
+  --border:     rgba(0, 0, 0, 0.08);
+  --border-md:  rgba(0, 0, 0, 0.12);
 
-  --text:       #E2E8F0;
-  --text-muted: #94A3B8;
-  --text-dim:   #64748B;
+  /* Text Colors */
+  --text:       #171717;
+  --text-muted: #384959;
+  --text-dim:   #384959;
+  --text-dark:  #0A0A0A;
 
+  /* Radius */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 24px;
+
+  /* Shadows */
+  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md:  0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg:  0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl:  0 20px 25px rgba(0, 0, 0, 0.15);
+
+  /* Navbar height token for spacing */
+  --navbar-height: 84px;
 }
 
 /* ─── Base ───────────────────────────────────────────────── */
@@ -37,14 +44,71 @@ html {
   font-size: 16px;
 }
 
+html, body {
+  min-height: 100%;
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Inter', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   background-color: var(--bg);
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
+  line-height: 1.75;
+}
+
+/* ─── Page Main — accounts for floating navbar ───────────── */
+.page-main {
+  padding-top: var(--navbar-height);
+  min-height: calc(100vh - var(--navbar-height));
+}
+
+/* ─── Typography Scale ───────────────────────────────────── */
+.heading-xl {
+  font-size:   clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-dark);
+}
+.heading-lg {
+  font-size:   clamp(1.6rem, 4vw, 2.8rem);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--text-dark);
+}
+.heading-md {
+  font-size:   clamp(1.2rem, 3vw, 1.8rem);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text-dark);
+}
+.body-lg {
+  font-size: clamp(0.95rem, 2vw, 1.125rem);
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+.body-sm {
+  font-size: 0.875rem;
+  color: var(--text-muted);
   line-height: 1.6;
+}
+
+/* ─── Section Spacing ────────────────────────────────────── */
+.section {
+  position: relative;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+.section-sm {
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
 }
 
 /* ─── Reliable Container ────────────────────────────────── */
@@ -91,7 +155,7 @@ body {
 .services-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
+  gap: 1.5rem;
 }
 @media (min-width: 640px) {
   .services-grid { grid-template-columns: repeat(2, 1fr); }
@@ -103,7 +167,7 @@ body {
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  gap: 1rem;
 }
 @media (min-width: 768px) {
   .stats-grid { grid-template-columns: repeat(4, 1fr); }
@@ -154,7 +218,7 @@ input:focus, textarea:focus, select:focus { outline: none; }
 }
 .card:hover {
   transform:    translateY(-3px);
-  border-color: rgba(108, 99, 255, 0.3);
+  border-color: rgba(37, 99, 235, 0.3);
   box-shadow:   0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
@@ -181,9 +245,9 @@ input:focus, textarea:focus, select:focus { outline: none; }
   gap:            6px;
   padding:        5px 14px;
   border-radius:  999px;
-  background:     rgba(108, 99, 255, 0.12);
-  border:         1px solid rgba(108, 99, 255, 0.28);
-  color:          #a5b4fc;
+  background:     rgba(37, 99, 235, 0.12);
+  border:         1px solid rgba(37, 99, 235, 0.28);
+  color:          #60A5FA;
   font-size:      0.75rem;
   font-weight:    600;
   letter-spacing: 0.07em;
@@ -193,8 +257,8 @@ input:focus, textarea:focus, select:focus { outline: none; }
 /* ─── Grid Background ────────────────────────────────────── */
 .grid-bg {
   background-image:
-    linear-gradient(rgba(108, 99, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(108, 99, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 52px 52px;
 }
 
@@ -213,49 +277,39 @@ input:focus, textarea:focus, select:focus { outline: none; }
   background: linear-gradient(to right, transparent, var(--border-md), transparent);
 }
 
-/* ─── Typography Scale ───────────────────────────────────── */
-.heading-xl {
-  font-size:   clamp(2rem, 5vw, 3.5rem);
-  font-weight: 900;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  color: #fff;
-}
-.heading-lg {
-  font-size:   clamp(1.6rem, 4vw, 2.8rem);
-  font-weight: 900;
-  line-height: 1.15;
-  letter-spacing: -0.015em;
-  color: #fff;
-}
-.heading-md {
-  font-size:   clamp(1.2rem, 3vw, 1.8rem);
-  font-weight: 700;
-  line-height: 1.25;
-  color: #fff;
-}
-.body-lg {
-  font-size: clamp(0.95rem, 2vw, 1.125rem);
-  color: var(--text-muted);
-  line-height: 1.7;
-}
-.body-sm {
-  font-size: 0.875rem;
-  color: var(--text-muted);
-  line-height: 1.6;
+/* ─── Contact Grid ───────────────────────────────────────── */
+@media (min-width: 768px) {
+  .contact-grid { grid-template-columns: 340px 1fr !important; }
 }
 
-/* ─── Section Spacing ────────────────────────────────────── */
-.section { padding-top: 80px; padding-bottom: 80px; }
-.section-sm { padding-top: 48px; padding-bottom: 48px; }
+/* ─── Dashboard Header ───────────────────────────────────── */
+.dashboard-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* ─── Footer Grid ────────────────────────────────────────── */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  margin-bottom: 48px;
+}
+@media (min-width: 640px) {
+  .footer-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
+}
 
 /* ─── Responsive Typography ──────────────────────────────── */
 @media (max-width: 768px) {
-  html { font-size: 15px; }
   .section { padding-top: 56px; padding-bottom: 56px; }
 }
 @media (max-width: 480px) {
-  html { font-size: 14px; }
   .section { padding-top: 40px; padding-bottom: 40px; }
 }
 

@@ -17,7 +17,7 @@ import './App.css';
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, loading } = useAuth();
   if (loading) return (
-    <div className="min-h-screen bg-[#060612] flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
       <div className="w-10 h-10 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
     </div>
   );
@@ -26,9 +26,9 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-col min-h-screen bg-[#060612]">
+    <div className="flex flex-col min-h-screen" style={{ background: 'var(--bg)' }}>
       <Navbar />
-      <main className="flex-1">{children}</main>
+      <main className="page-main flex-1">{children}</main>
       <Footer />
     </div>
   );

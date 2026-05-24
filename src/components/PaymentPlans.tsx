@@ -11,6 +11,15 @@ declare global {
 
 const plans = [
   {
+    id: 0,
+    name: "Test Payment",
+    price: 2,
+    features: ["Test Payment", "Payment Gateway Check", "Transaction Verification"],
+    popular: false,
+    best: false,
+    type: "test"
+  },
+  {
     id: 1,
     name: "Resume Audit",
     price: 0,
@@ -70,6 +79,7 @@ export default function PaymentPlans() {
       // Store selected plan for payment gateway
       localStorage.setItem('selectedPlan', plan.name);
       localStorage.setItem('planPrice', plan.price.toString());
+      localStorage.setItem('planId', plan.id.toString());
     }
   };
 

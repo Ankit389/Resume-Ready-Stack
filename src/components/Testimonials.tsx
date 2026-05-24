@@ -51,7 +51,7 @@ function Testimonials() {
     return () => clearInterval(timer)
   }, [])
 
-  const goToSlide = (index) => {
+  const goToSlide = (index: number) => {
     setCurrentIndex(index)
   }
 

@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, CheckCircle, Clock, Star, Users, ArrowRight, FileText } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
-import { Card, CardContent } from '../components/ui/card';
+
 import { servicesAPI } from '../lib/api';
 import { formatPrice } from '../lib/utils';
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { CreditCard, Shield, User, Mail, Phone, Building, CheckCircle, ArrowLeft, AlertCircle } from 'lucide-react';
+import { CreditCard, Shield, User, Mail, Phone, Building, CheckCircle, ArrowLeft, AlertCircle, FileText } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';

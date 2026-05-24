@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Award, CheckCircle, Heart, Target, Users, ArrowRight, Globe, Mail } from 'lucide-react';
+import { Award, Heart, Target, Users, ArrowRight, Globe, Mail } from 'lucide-react';
 import { Button } from '../components/ui/button';
 
 const milestones = [
